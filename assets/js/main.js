@@ -216,14 +216,44 @@
   function initThemes() {
     // Cambio de color de fondo al hacer scroll (estilo Collins)
     const root = document.documentElement;
+    // Dos capas de fondo que se funden (fluido en móvil)
+    let layers = $$(".bg-layer");
+    if (!layers.length) {
+      layers = [0, 1].map(() => { const d = document.createElement("div"); d.className = "bg-layer"; document.body.prepend(d); return d; });
+      layers[0].style.background = "#ffffff"; layers[0].classList.add("on");
+    }
+    const setTheme = (bg, fg) => {
+      root.style.setProperty("--bg", bg);
+      root.style.setProperty("--fg", fg);
+      const current = layers.find(l => l.style.zIndex === "-1") || layers.find(l => l.classList.contains("on")) || layers[0];
+      const probe = document.createElement("i"); probe.style.background = bg;
+      if (probe.style.background === current.style.background) return;
+      // la capa nueva aparece encima de la actual (sin pasar por blanco)
+      const next = layers.find(l => l !== current);
+      next.style.transition = "none"; next.classList.remove("on"); next.style.background = bg;
+      next.style.zIndex = "-1"; current.style.zIndex = "-2";
+      void next.offsetWidth;
+      next.style.transition = ""; next.classList.add("on");
+    };
     const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        root.style.setProperty("--bg", e.target.dataset.bg);
-        root.style.setProperty("--fg", e.target.dataset.fg);
-      });
+      entries.forEach(e => { if (e.isIntersecting) setTheme(e.target.dataset.bg, e.target.dataset.fg); });
     }, { rootMargin: "-55% 0px -45% 0px" });
     $$("[data-bg]").forEach(el => io.observe(el));
+    // Al llegar al final de la página, aplica el color de la última sección (pie)
+    if (!window.__cruBottom) {
+      window.__cruBottom = true;
+      let ticking = false;
+      addEventListener("scroll", () => {
+        if (ticking) return; ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) {
+            const last = $$("[data-bg]").at(-1);
+            if (last) setTheme(last.dataset.bg, last.dataset.fg);
+          }
+        });
+      }, { passive: true });
+    }
   }
 
   function initReveal() {
