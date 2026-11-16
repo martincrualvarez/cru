@@ -96,7 +96,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
   border-top: 1px solid var(--line); padding-top: 12px;
 }
 .hero-foot .sub { grid-column: 1 / span 4; text-transform: none; font-size: 12px; }
-.hero-foot .loc { grid-column: 7 / span 3; }
+.hero-foot .loc { grid-column: 9 / span 4; justify-self: end; }
 .hero-foot .scroll { grid-column: 12; justify-self: end; }
 
 /* ------------------------------------------------------------------- works */
@@ -321,8 +321,7 @@ figcaption { padding-top: 10px; }
   .skills .skill { flex: 1 1 45%; }
   .contact-grid { grid-template-columns: 1fr; }
   .hero-foot .sub { grid-column: 1 / -1; }
-  .hero-foot .loc { grid-column: 1 / span 8; }
-  .hero-foot .scroll { grid-column: 9 / -1; }
+  .hero-foot .loc { grid-column: 1 / -1; justify-self: start; }
   .works-head { grid-template-columns: 1fr; gap: 12px; }
   .tile, .tile.size-l, .tile.size-m, .tile.size-s,
   .grid .tile:nth-child(4n+3).size-m, .grid .tile:nth-child(4n+3).size-s { grid-column: 1 / -1; margin-top: 0 !important; }

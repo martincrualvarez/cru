@@ -146,7 +146,7 @@ window.CRU = {
       client: "University",
       size: "m",
       color: "#4A0E15",
-      cover: { src: "assets/media/haromy/haromy-film.mp4", poster: "assets/media/haromy/haromy-film-poster.jpg", ratio: "4/5" },
+      cover: { src: M("haromy/post-haromy"), ratio: "4/5" },
       intro: "HAROMY, *Sound of Scent*, is a fragrance concept inspired by music, where sound and scent collide and rhythms move beyond the senses. The line features two distinct variants: “Misty Mood”, an elegant and refined jazz-inspired fragrance designed for him; and “Duende”, a scent shaped by the passion and intensity of flamenco, created for her.\n\nThe project involved the whole process of branding, copy, art direction, packaging and 3D rendering of the perfume bottles.",
       hero: { type: "full", src: M("haromy/dscf1131-1"), ratio: "16/9" },
       blocks: [
