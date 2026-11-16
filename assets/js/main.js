@@ -80,11 +80,10 @@
         frame.href = `project.html#${items[k].slug}`; title.textContent = items[k].title; num.textContent = pad2(projects.indexOf(items[k]) + 1);
       }, 1400);
     }
-    $("#hero-sub").textContent = site.heroSub;
-    $("#hero-loc").textContent = site.location;
+    $("#hero-meta").innerHTML = (site.heroMeta || []).map((m, i) => `<span class="${i ? "muted" : ""}">${esc(m)}</span>`).join("");
+    $("#works-count").textContent = `(${pad2(projects.length)})`;
     $("#about-text").innerHTML = rich(site.about);
     $("#about-more").innerHTML = rich(site.aboutMore || "");
-    $("#works-intro").innerHTML = rich(site.worksIntro || "");
     const ph = site.photoPortfolio;
     $("#skills").innerHTML = site.skills.map(s => `
       <div class="skill" data-reveal><h3>${esc(s.title)}</h3><ul class="mono">${s.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>${

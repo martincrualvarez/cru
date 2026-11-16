@@ -40,9 +40,9 @@ window.CRU = {
     // Inicio: frase corta → minúsculas, como siempre
     heroLine: "cru, that's me, a creative in the making.",
     heroAccent: "cru",                 // palabra de la frase que va en color de acento (--accent en style.css)
-    heroSub:  "Among the disciplines I flow between, there are three protagonists: photography, digital design and illustration.",
+    // Línea de datos bajo la frase principal (corta, se lee de un vistazo)
+    heroMeta: ["Photography — Digital design — Illustration", "Digital Design student, U-TAD", "Madrid, Spain"],
 
-    worksIntro: "A selection of the projects that've shaped me as a creative. Each one reflects a moment of growth, exploration, and intention; from visual identities to photography and experimental concepts.",
 
     // Sección "who is cru?" (fondo negro). Párrafos largos → mayúsculas normales
     about: "I flow across different artistic disciplines, from photography to illustration and digital design. I'm in a constant process of learning and growing, always striving to bring intention and sensitivity to each project, while being able to tell *meaningful stories*.",

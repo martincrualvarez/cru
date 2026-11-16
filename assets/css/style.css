@@ -101,18 +101,15 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
 }
 .hero-foot {
   margin-top: clamp(32px, 6vw, 80px);
-  display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap);
+  display: flex; justify-content: space-between; gap: var(--gap); flex-wrap: wrap;
   border-top: 1px solid var(--line); padding-top: 12px;
 }
-.hero-foot .sub { grid-column: 1 / span 4; text-transform: none; font-family: var(--font-display); font-size: 15px; letter-spacing: 0; line-height: 1.45; }
-.hero-foot .loc { grid-column: 9 / span 4; justify-self: end; }
-.hero-foot .scroll { grid-column: 12; justify-self: end; }
 
 /* ------------------------------------------------------------------- works */
 .works { padding: 0 var(--pad) clamp(80px, 12vw, 180px); }
 .works-intro { margin: 0; max-width: 46ch; text-transform: none; font-family: var(--font-display); font-size: 17px; letter-spacing: 0; line-height: 1.45; color: var(--muted); }
 .works-head {
-  display: grid; grid-template-columns: 1fr 1.6fr auto; gap: var(--gap); align-items: start;
+  display: flex; justify-content: space-between; gap: var(--gap); align-items: baseline;
   padding: 0 0 var(--gap); margin-bottom: clamp(24px, 4vw, 56px);
 }
 .filters { display: flex; gap: 18px; flex-wrap: wrap; }
@@ -329,9 +326,11 @@ figcaption { padding-top: 10px; }
   .skills { flex-wrap: wrap; }
   .skills .skill { flex: 1 1 45%; }
   .contact-grid { grid-template-columns: 1fr; }
-  .hero-foot .sub { grid-column: 1 / -1; }
-  .hero-foot .loc { grid-column: 1 / -1; justify-self: start; }
-  .works-head { grid-template-columns: 1fr; gap: 12px; }
+  .hero-foot { flex-direction: column; gap: 4px; }
+  .hero { min-height: auto; padding-top: 112px; }
+  .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 16px; white-space: nowrap; max-width: 100%; }
+  .filters::-webkit-scrollbar { display: none; }
+  .works-head { flex-direction: column; gap: 12px; }
   .tile, .tile.size-l, .tile.size-m, .tile.size-s,
   .grid .tile:nth-child(4n+3).size-m, .grid .tile:nth-child(4n+3).size-s { grid-column: 1 / -1; margin-top: 0 !important; }
   .about-label, .about-text, .about-more, .p-intro-body, .b-text-body, .skill, .p-intro .mono, .p-intro p, .b-text .mono, .b-text p,
