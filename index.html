@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CRU — creative portfolio</title>
+  <meta name="description" content="CRU — photography, digital design and illustration. Madrid, Spain.">
+  <meta property="og:title" content="CRU — creative portfolio">
+  <meta property="og:description" content="Photography, digital design and illustration.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Tipografías. Si tienes Neue Haas Grotesk Display en Adobe Fonts, añade aquí
+       tu <link rel="stylesheet" href="https://use.typekit.net/XXXXXXX.css"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="logo" href="index.html" data-logo aria-label="CRU — home">CRU</a>
+    <nav class="mono">
+      <a class="link-u" href="#works">Works</a>
+      <a class="link-u" href="#about">About</a>
+      <a class="link-u" href="#contact">Contact</a>
+      <a class="link-u ext" data-photo-link target="_blank" rel="noopener">Photography ↗</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" data-bg="#ffffff" data-fg="#0b0b0b">
+      <div class="hero-top">
+        <h1 id="hero-line"></h1>
+        <div class="hero-reel" id="hero-reel" aria-label="Selected works"></div>
+      </div>
+      <div class="hero-foot mono">
+        <span class="sub" id="hero-sub"></span>
+        <span class="loc muted" id="hero-loc"></span>
+        <a class="scroll link-u" href="#works">(scroll)</a>
+      </div>
+    </section>
+
+    <section class="works" id="works" data-bg="#ffffff" data-fg="#0b0b0b">
+      <div class="works-head mono">
+        <span>Selected works</span>
+        <p class="works-intro" id="works-intro"></p>
+        <div class="filters" id="filters" role="group" aria-label="Filter works"></div>
+      </div>
+      <div class="grid" id="works-grid"></div>
+    </section>
+
+    <section class="about" id="about" data-bg="#0b0b0b" data-fg="#ffffff">
+      <div class="about-grid">
+        <div class="about-label" data-reveal>
+          <span class="mono">Who is cru?</span>
+          <figure class="about-photo" id="about-photo"></figure>
+        </div>
+        <p class="about-text" id="about-text" data-reveal></p>
+        <p class="about-more" id="about-more" data-reveal></p>
+      </div>
+      <div class="skills mono" id="skills"></div>
+    </section>
+
+    <section class="contact" id="contact" data-bg="#0b0b0b" data-fg="#ffffff">
+      <p class="closing mono muted" id="closing"></p>
+      <a class="big-link" id="contact-link" href="#" data-cursor="write"><span>let's talk&nbsp;→</span></a>
+      <div class="contact-grid mono">
+        <div><span class="muted">Email</span><br><a class="link-u" id="contact-email" href="#"></a> <button type="button" class="copy mono" id="copy-email">copy</button></div>
+        <div id="contact-socials"></div>
+        <div><span class="muted">Based in</span><br><span id="contact-loc"></span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer" data-bg="#0b0b0b" data-fg="#ffffff"></footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

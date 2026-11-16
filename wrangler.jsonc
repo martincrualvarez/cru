@@ -1,0 +1,9 @@
+// Configuración de Cloudflare: publica la carpeta como web estática
+{
+  "name": "cru",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "404-page"
+  }
+}
