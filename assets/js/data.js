@@ -21,6 +21,7 @@ window.CRU = {
   site: {
     name: "CRU",
     fullName: "Martín Cru",
+    legalName: "Martín Cru",           // ← nombre y apellidos completos para el aviso legal
     role: "creative portfolio",
     location: "Madrid, Spain",
     email: "martincrualvare@gmail.com",

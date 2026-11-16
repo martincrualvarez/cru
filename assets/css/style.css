@@ -3,12 +3,20 @@
    Tipografía display: Neue Haas Grotesk Display Pro Light si tienes licencia
    web (Adobe Fonts / Monotype). Mientras, Inter Tight 300 como sustituta.
    Para cambiarla basta con editar --font-display.
+   Accesibilidad: foco visible con teclado y contraste AA en textos secundarios.
    ========================================================================== */
+
+/* Tipografías alojadas localmente (sin Google Fonts → sin enviar la IP del visitante a terceros) */
+@font-face { font-family: "Inter Tight"; src: url("../fonts/inter-tight-latin-300-normal.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter Tight"; src: url("../fonts/inter-tight-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter Tight"; src: url("../fonts/inter-tight-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url("../fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("../fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 
 :root {
   --bg: #ffffff;
   --fg: #0b0b0b;
-  --muted: color-mix(in srgb, var(--fg) 45%, transparent);
+  --muted: color-mix(in srgb, var(--fg) 62%, transparent);  /* contraste AA */
   --line: color-mix(in srgb, var(--fg) 14%, transparent);
 
   --font-display: "neue-haas-grotesk-display", "Neue Haas Grotesk Display Pro", "Inter Tight", "Helvetica Neue", Arial, sans-serif;
@@ -378,3 +386,6 @@ html { background: #ffffff; }
   .nav-drop ul { -webkit-backdrop-filter: none; backdrop-filter: none; }
   .sound { -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+/* foco visible al navegar con teclado */
+:focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; }

@@ -37,6 +37,7 @@
 
   function renderChrome() {
     $$("[data-logo]").forEach(el => (el.innerHTML = logo()));
+    $$("[data-legal-name]").forEach(el => (el.textContent = site.legalName || site.fullName || site.name));
     $$("[data-photo-link]").forEach(a => site.photoPortfolio?.url ? (a.href = site.photoPortfolio.url) : a.remove());
     // Desplegable de trabajos al pasar por "Works"
     const works = $$(".site-header nav a").find(a => /works/i.test(a.textContent));
@@ -51,7 +52,7 @@
     const f = $("#site-footer");
     if (!f) return;
     f.innerHTML = `
-      <div class="mono">${esc(site.name)}<br><span class="muted">${esc(site.role)}</span></div>
+      <div class="mono">${esc(site.name)}<br><span class="muted">${esc(site.role)}</span><br><a class="link-u muted" href="legal.html">Legal & privacy</a></div>
       <div class="mono">${esc(site.location)}</div>
       <div class="mono">${site.socials.map(s => `<a class="link-u" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join("")}</div>
       <div class="mono"><a class="link-u" href="mailto:${esc(site.email)}">${esc(site.email)}</a><br><span class="muted">${new Date().getFullYear()} © ${esc(site.name)}</span></div>
