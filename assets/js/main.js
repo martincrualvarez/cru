@@ -68,9 +68,8 @@
     const accentRe = site.heroAccent ? new RegExp(`\\b(${site.heroAccent})\\b(,?)`) : /$^/;
     const heroSvg = (site.logoSVG || "").replace(/\s(role|aria-label)="[^"]*"/g, "").replace("<svg ", '<svg aria-hidden="true" focusable="false" ');
     $("#hero-line").innerHTML = splitLines(site.heroLine).replace(accentRe, site.heroLogo && heroSvg
-      ? `<span class="hero-logo accent"><span class="sr-only">$1$2</span>${heroSvg}</span>`   // la coma se oculta: el texto se mete bajo la V
+      ? `<span class="hero-logo accent"><span class="sr-only">$1</span>${heroSvg}</span>$2`
       : '<span class="accent">$1</span>$2');
-    $$("#hero-line .hero-logo").forEach(l => l.closest(".split-line")?.classList.add("has-logo"));
     // Mini visor en la home: pasa por las portadas de los trabajos
     const reel = $("#hero-reel");
     if (reel && site.heroReel !== false) {
