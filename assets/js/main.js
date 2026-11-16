@@ -64,7 +64,13 @@
     const grid = $("#works-grid");
     if (!grid) return;
 
-    $("#hero-line").innerHTML = splitLines(site.heroLine).replace(site.heroAccent ? new RegExp(`\\b(${site.heroAccent})\\b`) : /$^/, '<span class="accent">$1</span>');
+    // La palabra de acento (heroAccent) se sustituye por el logo SVG si heroLogo: true; si no, va en color
+    const accentRe = site.heroAccent ? new RegExp(`\\b(${site.heroAccent})\\b(,?)`) : /$^/;
+    const heroSvg = (site.logoSVG || "").replace(/\s(role|aria-label)="[^"]*"/g, "").replace("<svg ", '<svg aria-hidden="true" focusable="false" ');
+    $("#hero-line").innerHTML = splitLines(site.heroLine).replace(accentRe, site.heroLogo && heroSvg
+      ? `<span class="hero-logo accent"><span class="sr-only">$1$2</span>${heroSvg}</span>`   // la coma se oculta: el texto se mete bajo la V
+      : '<span class="accent">$1</span>$2');
+    $$("#hero-line .hero-logo").forEach(l => l.closest(".split-line")?.classList.add("has-logo"));
     // Mini visor en la home: pasa por las portadas de los trabajos
     const reel = $("#hero-reel");
     if (reel && site.heroReel !== false) {
@@ -75,10 +81,14 @@
         <span class="reel-label mono"><span class="muted">${pad2(1)}</span> <span class="reel-title">${esc(items[0].title)}</span></span>`;
       let k = 0;
       const imgs = $$("img", reel), frame = $(".reel-frame", reel), title = $(".reel-title", reel), num = $(".reel-label .muted", reel);
-      if (!reduced) setInterval(() => {
+      // Cambia cada 2,4 s; se detiene si el visor no está en pantalla o la pestaña está oculta
+      let visible = true;
+      new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(frame);
+      if (!reduced && imgs.length > 1) setInterval(() => {
+        if (!visible || document.hidden) return;
         imgs[k].classList.remove("on"); k = (k + 1) % imgs.length; imgs[k].classList.add("on");
         frame.href = `project.html#${items[k].slug}`; title.textContent = items[k].title; num.textContent = pad2(projects.indexOf(items[k]) + 1);
-      }, 1400);
+      }, 2400);
     }
     $("#hero-meta").innerHTML = (site.heroMeta || []).map((m, i) => `<span class="${i ? "muted" : ""}">${esc(m)}</span>`).join("");
     $("#works-count").textContent = `(${pad2(projects.length)})`;
@@ -121,7 +131,11 @@
       const b = e.target.closest("button"); if (!b) return;
       $$("button", filters).forEach(x => x.setAttribute("aria-pressed", x === b));
       const t = b.dataset.filter;
-      $$(".tile", grid).forEach(tile => tile.classList.toggle("is-hidden", t !== "All" && !tile.dataset.tags.split("|").includes(t)));
+      const apply = () => $$(".tile", grid).forEach(tile => tile.classList.toggle("is-hidden", t !== "All" && !tile.dataset.tags.split("|").includes(t)));
+      if (reduced) return apply();
+      // fundido corto: se apaga la rejilla, se filtra y vuelve a aparecer
+      grid.classList.add("is-filtering");
+      setTimeout(() => { apply(); $$(".tile", grid).forEach(x => x.classList.add("is-in")); grid.classList.remove("is-filtering"); }, 180);
     });
   }
 
@@ -321,7 +335,7 @@
       setTimeout(() => {
         if (samePage) { location.hash = url.hash; }
         else location.href = url.href;
-      }, reduced ? 0 : 560);
+      }, reduced ? 0 : 440);
     });
 
     // Navegar entre proyectos (mismo project.html, distinto #)

@@ -40,6 +40,7 @@ window.CRU = {
     // Inicio: frase corta → minúsculas, como siempre
     heroLine: "cru, that's me, a creative in the making.",
     heroAccent: "cru",                 // palabra de la frase que va en color de acento (--accent en style.css)
+    heroLogo: true,                    // true → esa palabra se sustituye por el logo (en color de acento); false → texto en color
     // Línea de datos bajo la frase principal (corta, se lee de un vistazo)
     heroMeta: ["Photography — Digital design — Illustration", "Digital Design student, U-TAD", "Madrid, Spain"],
 
