@@ -21,7 +21,7 @@ window.CRU = {
   site: {
     name: "CRU",
     fullName: "Martín Cru",
-    legalName: "Martín Cru",           // ← nombre y apellidos completos para el aviso legal
+    legalName: "Martín Cru Álvarez",    // nombre completo para el aviso legal
     role: "creative portfolio",
     location: "Madrid, Spain",
     email: "martincrualvare@gmail.com",
@@ -39,6 +39,7 @@ window.CRU = {
 
     // Inicio: frase corta → minúsculas, como siempre
     heroLine: "cru, that's me, a creative in the making.",
+    heroAccent: "cru",                 // palabra de la frase que va en color de acento (--accent en style.css)
     heroSub:  "Among the disciplines I flow between, there are three protagonists: photography, digital design and illustration.",
 
     worksIntro: "A selection of the projects that've shaped me as a creative. Each one reflects a moment of growth, exploration, and intention; from visual identities to photography and experimental concepts.",

@@ -29,7 +29,7 @@
     if (item.type === "video" || isVideo(src)) {
       return `<video src="${esc(src)}" ${item.poster ? `poster="${esc(item.poster)}"` : ""} muted loop playsinline preload="metadata" data-autoplay></video>`;
     }
-    return `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async" ${fb}>`;
+    return `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async" onload="this.classList.add('ld')" ${fb}>`;
   }
 
   /* ------------------------------------------------------- logo + footer */
@@ -52,10 +52,10 @@
     const f = $("#site-footer");
     if (!f) return;
     f.innerHTML = `
-      <div class="mono">${esc(site.name)}<br><span class="muted">${esc(site.role)}</span><br><a class="link-u muted" href="legal.html">Legal & privacy</a></div>
-      <div class="mono">${esc(site.location)}</div>
-      <div class="mono">${site.socials.map(s => `<a class="link-u" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join("")}</div>
-      <div class="mono"><a class="link-u" href="mailto:${esc(site.email)}">${esc(site.email)}</a><br><span class="muted">${new Date().getFullYear()} © ${esc(site.name)}</span></div>
+      <div class="mono muted">© ${new Date().getFullYear()} ${esc(site.fullName || site.name)}</div>
+      <div class="mono"><a class="link-u muted" href="legal.html">Legal & privacy</a></div>
+      <div></div>
+      <div class="mono"><a class="link-u muted" href="#" data-top>Back to top ↑</a></div>
       <div class="footer-logo" aria-hidden="true">${logo()}</div>`;
   }
 
@@ -64,7 +64,7 @@
     const grid = $("#works-grid");
     if (!grid) return;
 
-    $("#hero-line").innerHTML = splitLines(site.heroLine);
+    $("#hero-line").innerHTML = splitLines(site.heroLine).replace(site.heroAccent ? new RegExp(`\\b(${site.heroAccent})\\b`) : /$^/, '<span class="accent">$1</span>');
     // Mini visor en la home: pasa por las portadas de los trabajos
     const reel = $("#hero-reel");
     if (reel && site.heroReel !== false) {
@@ -116,9 +116,8 @@
 
     // Filtros
     const all = ["All", ...new Set(projects.flatMap(p => p.tags || []))];
-    const count = t => t === "All" ? projects.length : projects.filter(p => (p.tags || []).includes(t)).length;
     const filters = $("#filters");
-    filters.innerHTML = all.map((t, i) => `<button type="button" aria-pressed="${i === 0}" data-filter="${esc(t)}">${esc(t)}<sup>${count(t)}</sup></button>`).join("");
+    filters.innerHTML = all.map((t, i) => `<button type="button" aria-pressed="${i === 0}" data-filter="${esc(t)}">${esc(t)}</button>`).join("");
     filters.addEventListener("click", e => {
       const b = e.target.closest("button"); if (!b) return;
       $$("button", filters).forEach(x => x.setAttribute("aria-pressed", x === b));
@@ -301,6 +300,7 @@
     requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add("is-ready")));
 
     document.addEventListener("click", e => {
+      if (e.target.closest("[data-top]")) { e.preventDefault(); scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }); return; }
       const a = e.target.closest("a[href]");
       if (!a || a.target === "_blank" || e.metaKey || e.ctrlKey || e.shiftKey) return;
       // Anclas de la misma página (#works, #about, #contact): scroll suave

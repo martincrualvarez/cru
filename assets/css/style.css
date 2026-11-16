@@ -22,6 +22,7 @@
   --font-display: "neue-haas-grotesk-display", "Neue Haas Grotesk Display Pro", "Inter Tight", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   --font-serif: "Instrument Serif", "Times New Roman", serif;
+  --accent: #5F6840;   /* verde oliva de SUMM: color de acento de la marca */
 
   --pad: clamp(16px, 2.2vw, 32px);
   --gap: clamp(12px, 1.6vw, 24px);
@@ -103,7 +104,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
   display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap);
   border-top: 1px solid var(--line); padding-top: 12px;
 }
-.hero-foot .sub { grid-column: 1 / span 4; text-transform: none; font-size: 12px; }
+.hero-foot .sub { grid-column: 1 / span 4; text-transform: none; font-family: var(--font-display); font-size: 15px; letter-spacing: 0; line-height: 1.45; }
 .hero-foot .loc { grid-column: 9 / span 4; justify-self: end; }
 .hero-foot .scroll { grid-column: 12; justify-self: end; }
 
@@ -185,7 +186,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
 }
 .skill { flex: 0 1 auto; }
 .skill h3 { margin: 0 0 14px; font-family: var(--font-display); text-transform: none; font-weight: 300; font-size: 24px; letter-spacing: -.02em; }
-.skill ul { list-style: none; margin: 0; padding: 0; }
+.skill ul { list-style: none; margin: 0; padding: 0; font-family: var(--font-display); font-size: 15px; text-transform: none; letter-spacing: 0; line-height: 1.6; }
 .skill li { color: var(--muted); }
 
 /* ----------------------------------------------------------------- contact */
@@ -269,7 +270,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
 .p-hero-alt .b-full .ph { max-height: 100vh; }
 .sound { all: unset; cursor: pointer; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .04em; position: absolute; right: 12px; bottom: 12px; z-index: 2; padding: 6px 11px; border-radius: 999px; background: rgba(0,0,0,.55); color: #fff; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 .ph.natural .sound { position: absolute; }
-.skill-note { display: inline-block; margin-top: 22px; max-width: 24ch; text-transform: none; color: var(--fg); line-height: 1.5; }
+.skill-note { display: inline-block; margin-top: 22px; max-width: 26ch; text-transform: none; font-family: var(--font-display); font-size: 15px; letter-spacing: 0; color: var(--fg); line-height: 1.45; }
 .about-photo { margin: 24px 0 0; width: min(100%, 220px); aspect-ratio: 4/5; overflow: hidden; }
 .about-photo img { filter: grayscale(1); transition: filter .8s var(--ease); }
 .about-photo:hover img { filter: none; }
@@ -389,3 +390,16 @@ html { background: #ffffff; }
 
 /* foco visible al navegar con teclado */
 :focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; }
+
+/* --------------------------------------------------- detalles de diseño */
+.accent { color: var(--accent); }
+::selection { background: var(--accent); color: #fff; }
+h1, h2, h3, .p-title, .b-quote p, .about-text, .photo-cta-title, .p-next .t { text-wrap: balance; }
+p { text-wrap: pretty; }
+.mono, .tile-meta, .p-meta, .reel-label, .nav-drop { font-variant-numeric: tabular-nums; }
+/* las imágenes aparecen con un fundido al cargar (sobre el fondo gris del hueco) */
+.tile-media img, .ph img { opacity: 0; transition: opacity .7s var(--ease), transform 1.1s var(--ease); }
+.tile-media img.ld, .ph img.ld { opacity: 1; }
+/* filtros: los trabajos se ocultan/aparecen con transición */
+.tile { transition: opacity .45s var(--ease), transform .45s var(--ease); }
+.site-footer { align-items: end; }
