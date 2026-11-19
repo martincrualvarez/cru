@@ -2,8 +2,25 @@
    CRU — lógica del sitio (no hace falta tocar esto para añadir trabajos)
    ========================================================================== */
 (() => {
-  const { site } = window.CRU;
-  const projects = window.CRU.projects.filter(p => !p.hidden);
+  /* ------------------------------------------------------------- idioma
+     EN por defecto; ES si el visitante lo elige con el botón (se recuerda),
+     si llega con ?lang=es o si su navegador está en español. */
+  const store = { get: k => { try { return localStorage.getItem(k); } catch { return null; } },
+                  set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
+  const qp = new URLSearchParams(location.search).get("lang");
+  if (qp === "es" || qp === "en") store.set("cru-lang", qp);
+  const lang = (qp === "es" || qp === "en") ? qp : store.get("cru-lang") || ((navigator.language || "").toLowerCase().startsWith("es") ? "es" : "en");
+  const ES = lang === "es";
+  document.documentElement.lang = lang;
+  const UI = (window.CRU.i18n && window.CRU.i18n.es) || {};
+  const T = (key, en) => (ES && UI[key] !== undefined ? UI[key] : en);          // textos de la interfaz
+  const tr = o => (ES && o && o.es ? { ...o, ...o.es } : o);                    // objeto con su versión es: { ... }
+  const trBlock = b => { const n = tr(b); return n && n.items ? { ...n, items: n.items.map(trBlock) } : n; };
+  const trProject = p => { if (!ES) return p; const n = tr(p); return { ...n, hero: n.hero && trBlock(n.hero), blocks: (n.blocks || []).map(trBlock) }; };
+  const tag = t => T("tags", {})[t] || t;
+
+  const site = tr(window.CRU.site);
+  const projects = window.CRU.projects.filter(p => !p.hidden).map(trProject);
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s = "") => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -36,6 +53,17 @@
   function logo() { return site.logoSVG ? site.logoSVG : esc(site.name); }
 
   function renderChrome() {
+    // Textos fijos del HTML marcados con data-i18n="clave" (y data-i18n-aria para etiquetas accesibles)
+    if (ES) {
+      $$("[data-i18n]").forEach(el => { const v = UI[el.dataset.i18n]; if (v !== undefined) el.textContent = v; });
+      $$("[data-i18n-aria]").forEach(el => { const v = UI[el.dataset.i18nAria]; if (v !== undefined) el.setAttribute("aria-label", v); });
+      if (document.body.dataset.page === "home" && UI.homeTitle) document.title = UI.homeTitle;
+    }
+    // Botón de idioma en la cabecera
+    const nav = $(".site-header nav");
+    if (nav && !$(".lang-toggle", nav)) {
+      nav.insertAdjacentHTML("beforeend", `<button type="button" class="lang-toggle mono" data-lang="${ES ? "en" : "es"}" lang="${ES ? "en" : "es"}" aria-label="${ES ? "Switch to English" : "Ver en español"}"><span class="${ES ? "muted" : ""}">EN</span><span class="muted" aria-hidden="true">/</span><span class="${ES ? "" : "muted"}">ES</span></button>`);
+    }
     $$("[data-logo]").forEach(el => (el.innerHTML = logo()));
     $$("[data-legal-name]").forEach(el => (el.textContent = site.legalName || site.fullName || site.name));
     $$("[data-photo-link]").forEach(a => site.photoPortfolio?.url ? (a.href = site.photoPortfolio.url) : a.remove());
@@ -53,9 +81,9 @@
     if (!f) return;
     f.innerHTML = `
       <div class="mono muted">© ${new Date().getFullYear()} ${esc(site.fullName || site.name)}</div>
-      <div class="mono"><a class="link-u muted" href="legal.html">Legal & privacy</a></div>
+      <div class="mono"><a class="link-u muted" href="legal.html">${T("legal", "Legal & privacy")}</a></div>
       <div></div>
-      <div class="mono"><a class="link-u muted" href="#" data-top>Back to top ↑</a></div>
+      <div class="mono"><a class="link-u muted" href="#" data-top>${T("top", "Back to top ↑")}</a></div>
       <div class="footer-logo" aria-hidden="true">${logo()}</div>`;
   }
 
@@ -96,18 +124,18 @@
     const ph = site.photoPortfolio;
     $("#skills").innerHTML = site.skills.map(s => `
       <div class="skill" data-reveal><h3>${esc(s.title)}</h3><ul class="mono">${s.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>${
-        ph?.url && /photo/i.test(s.title) ? `<a class="skill-note mono link-u" href="${esc(ph.url)}" target="_blank" rel="noopener">${esc(ph.label)}</a>` : ""}</div>`).join("");
+        ph?.url && (s.photo || /photo|foto/i.test(s.title)) ? `<a class="skill-note mono link-u" href="${esc(ph.url)}" target="_blank" rel="noopener">${esc(site.photoLabel || ph.label)}</a>` : ""}</div>`).join("");
     if (site.aboutPhoto) $("#about-photo").innerHTML = `<img src="${esc(site.aboutPhoto)}" alt="${esc(site.fullName || site.name)}" loading="lazy">`;
     $("#closing").innerHTML = site.closing.map(esc).join("<br>");
     $("#contact-email").textContent = site.email;
     $("#contact-email").href = `mailto:${site.email}`;
     $("#contact-link").href = `mailto:${site.email}`;
     $("#contact-loc").textContent = site.location;
-    $("#contact-socials").innerHTML = `<span class="muted">Socials</span><br>` + site.socials.map(s => `<a class="link-u" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)} ↗</a>`).join("<br>");
+    $("#contact-socials").innerHTML = `<span class="muted">${T("socials", "Socials")}</span><br>` + site.socials.map(s => `<a class="link-u" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)} ↗</a>`).join("<br>");
     $("#copy-email").addEventListener("click", async e => {
-      try { await navigator.clipboard.writeText(site.email); e.target.textContent = "copied ✓"; }
-      catch { e.target.textContent = "select & copy"; }
-      setTimeout(() => (e.target.textContent = "copy"), 2000);
+      try { await navigator.clipboard.writeText(site.email); e.target.textContent = T("copied", "copied ✓"); }
+      catch { e.target.textContent = T("selectCopy", "select & copy"); }
+      setTimeout(() => (e.target.textContent = T("copy", "copy")), 2000);
     });
 
 
@@ -125,7 +153,7 @@
     // Filtros
     const all = ["All", ...new Set(projects.flatMap(p => p.tags || []))];
     const filters = $("#filters");
-    filters.innerHTML = all.map((t, i) => `<button type="button" aria-pressed="${i === 0}" data-filter="${esc(t)}">${esc(t)}</button>`).join("");
+    filters.innerHTML = all.map((t, i) => `<button type="button" aria-pressed="${i === 0}" data-filter="${esc(t)}">${esc(tag(t))}</button>`).join("");
     filters.addEventListener("click", e => {
       const b = e.target.closest("button"); if (!b) return;
       $$("button", filters).forEach(x => x.setAttribute("aria-pressed", x === b));
@@ -171,7 +199,7 @@
     // Caja de imagen: con ratio → recorte exacto; sin ratio → tamaño natural (verticales, vídeos…)
     const box = (it, r, extra = "") => {
       const ratio = it.ratio || r;
-      const snd = it.sound ? `<button type="button" class="sound mono" data-sound>sound on</button>` : "";
+      const snd = it.sound ? `<button type="button" class="sound mono" data-sound>${T("soundOn", "sound on")}</button>` : "";
       return `<div class="ph${ratio ? "" : " natural"}" ${extra} ${ratio ? `style="aspect-ratio:${ratio}"` : ""}>${media(it, p.title, p.color)}${snd}</div>`;
     };
     const cols = b => {
@@ -194,7 +222,7 @@
         // Vídeo de YouTube: se ve la portada local y solo carga YouTube al pulsar play (sin cookies hasta entonces)
         case "youtube": return `<figure class="b-full" data-reveal style="margin:0"><div class="ph yt" style="aspect-ratio:${esc(b.ratio || "16/9")}">
             ${b.poster ? media({ src: b.poster }, p.title, p.color) : ""}
-            <button type="button" class="yt-play mono" data-yt="${esc(b.id)}" aria-label="Play video: ${esc(b.caption || p.title)}"><span class="yt-icon" aria-hidden="true"></span>Play video</button>
+            <button type="button" class="yt-play mono" data-yt="${esc(b.id)}" data-title="${esc(b.caption || p.title)}" aria-label="${esc(T("play", "Play video"))}: ${esc(b.caption || p.title)}"><span class="yt-icon" aria-hidden="true"></span>${esc(T("play", "Play video"))}</button>
           </div>${b.caption ? `<figcaption class="mono muted" style="padding-left:var(--pad)">${esc(b.caption)}</figcaption>` : ""}</figure>`;
         default: return "";
       }
@@ -202,22 +230,22 @@
 
     root.innerHTML = `
       <section class="p-head" ${light}>
-        <a class="back mono link-u" href="index.html#works">← All works</a>
+        <a class="back mono link-u" href="index.html#works">${T("allWorks", "← All works")}</a>
         <div class="mono muted" style="margin-bottom:14px">${pad2(idx + 1)} / ${pad2(projects.length)}</div>
         <h1 class="p-title">${splitLines(p.title)}</h1>
         <dl class="p-meta mono">
-          <div><dt>Discipline</dt><dd>${esc(p.discipline)}</dd></div>
-          <div><dt>Industry</dt><dd>${esc(p.industry || "—")}</dd></div>
-          <div><dt>Client</dt><dd>${esc(p.client || "—")}</dd></div>
-          <div><dt>Year</dt><dd>${esc(p.year || "—")}</dd></div>
+          <div><dt>${T("discipline", "Discipline")}</dt><dd>${esc(p.discipline)}</dd></div>
+          <div><dt>${T("industry", "Industry")}</dt><dd>${esc(p.industry || "—")}</dd></div>
+          <div><dt>${T("client", "Client")}</dt><dd>${esc(p.client || "—")}</dd></div>
+          <div><dt>${T("year", "Year")}</dt><dd>${esc(p.year || "—")}</dd></div>
         </dl>
       </section>
       ${p.hero ? `<section class="p-hero-alt" ${light}>${block(p.hero)}</section>` : `<section class="p-hero" ${light}>${media(p.cover, p.title, p.color)}</section>`}
-      <section class="p-intro" ${light}><span class="mono" data-reveal>About the project</span><div class="p-intro-body">${paras(p.intro)}${p.collab?.length ? `<p class="p-collab mono" data-reveal><span class="muted">In collaboration with</span> ${people(p.collab)}</p>` : ""}</div></section>
+      <section class="p-intro" ${light}><span class="mono" data-reveal>${T("aboutProject", "About the project")}</span><div class="p-intro-body">${paras(p.intro)}${p.collab?.length ? `<p class="p-collab mono" data-reveal><span class="muted">${T("collab", "In collaboration with")}</span> ${people(p.collab)}</p>` : ""}</div></section>
       ${segments.filter(s => s.items.length).map(s => `<section class="blocks" ${s.theme}>${s.items.map(block).join("")}</section>`).join("")}
-      ${p.credits?.length ? `<section class="p-credits" ${light}><span class="mono">Credits</span><dl class="mono">${p.credits.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${Array.isArray(v) ? people(v) : esc(v)}</dd>`).join("")}</dl></section>` : ""}
+      ${p.credits?.length ? `<section class="p-credits" ${light}><span class="mono">${T("credits", "Credits")}</span><dl class="mono">${p.credits.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${Array.isArray(v) ? people(v) : esc(v)}</dd>`).join("")}</dl></section>` : ""}
       <a class="p-next" href="project.html#${esc(next.slug)}" data-bg="#0b0b0b" data-fg="#ffffff" data-cursor="next">
-        <div class="mono muted" style="margin-bottom:20px">Next project</div>
+        <div class="mono muted" style="margin-bottom:20px">${T("nextProject", "Next project")}</div>
         <div class="row"><span class="t">${esc(next.title)}</span><span class="thumb">${media(next.cover, next.title, next.color)}</span></div>
       </a>`;
   }
@@ -235,7 +263,7 @@
     if (!b) return;
     const f = document.createElement("iframe");
     f.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(b.dataset.yt)}?autoplay=1&rel=0&modestbranding=1`;
-    f.title = b.getAttribute("aria-label").replace(/^Play video: /, "");
+    f.title = b.dataset.title || "YouTube";
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     f.allowFullscreen = true;
     b.parentElement.replaceChildren(f);
@@ -312,7 +340,7 @@
         const b = e.target.closest("[data-sound]"); if (!b) return;
         const v = b.parentElement.querySelector("video"); if (!v) return;
         v.muted = !v.muted; if (!v.muted) v.play().catch(() => {});
-        b.textContent = v.muted ? "sound on" : "sound off";
+        b.textContent = v.muted ? T("soundOn", "sound on") : T("soundOff", "sound off");
       });
     }
   }
@@ -325,7 +353,7 @@
     addEventListener("pointermove", e => { c.style.left = e.clientX + "px"; c.style.top = e.clientY + "px"; }, { passive: true });
     document.addEventListener("pointerover", e => {
       const t = e.target.closest("[data-cursor]");
-      if (t) { c.textContent = t.dataset.cursor; c.classList.add("on"); } else c.classList.remove("on");
+      if (t) { c.textContent = T("cursor", {})[t.dataset.cursor] || t.dataset.cursor; c.classList.add("on"); } else c.classList.remove("on");
     });
   }
 
@@ -336,6 +364,18 @@
     requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add("is-ready")));
 
     document.addEventListener("click", e => {
+      const lb = e.target.closest("[data-lang]");
+      if (lb) {
+        store.set("cru-lang", lb.dataset.lang);
+        const u = new URL(location.href); u.searchParams.delete("lang");
+        const go = () => (u.href === location.href ? location.reload() : location.replace(u.href));
+        if (reduced) return go();
+        curtain.classList.add("from-bottom");
+        document.documentElement.classList.remove("is-ready");
+        requestAnimationFrame(() => { curtain.classList.remove("from-bottom"); document.documentElement.classList.add("is-leaving"); });
+        setTimeout(go, 440);
+        return;
+      }
       if (e.target.closest("[data-top]")) { e.preventDefault(); scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }); return; }
       const a = e.target.closest("a[href]");
       if (!a || a.target === "_blank" || e.metaKey || e.ctrlKey || e.shiftKey) return;

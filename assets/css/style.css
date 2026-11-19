@@ -476,3 +476,11 @@ p { text-wrap: pretty; }
 .person:focus-visible .arr { opacity: 1; transform: translate(1px, -1px); }
 @media (hover: hover) and (pointer: fine) { .person:hover .arr { opacity: 1; transform: translate(1px, -1px); } }
 @media (hover: none) { .person .arr { opacity: .8; } }
+
+/* ---------- Botón de idioma EN / ES (cabecera) ---------- */
+.lang-toggle { all: unset; cursor: pointer; display: inline-flex; gap: 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .02em; text-transform: uppercase; line-height: 1.5; transition: transform .16s var(--ease-out); }
+.lang-toggle .muted { transition: color .2s ease; }
+.lang-toggle:active { transform: scale(var(--press)); }
+.lang-toggle:focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) { .lang-toggle:hover .muted { color: var(--fg); } }
+@media (max-width: 760px) { .lang-toggle { padding: 8px 0 8px 4px; margin: -8px 0; } }

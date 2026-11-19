@@ -9,6 +9,11 @@
    ✦ Ocultar un trabajo sin borrarlo: hidden: true
    ✦ Párrafos: sepáralos con una línea en blanco (\n\n)
 
+   ✦ ESPAÑOL: cada texto en inglés puede llevar al lado su versión en
+     español dentro de  es: { ... }  (en el sitio, en cada trabajo y en cada
+     bloque). Si falta, se muestra el inglés. Los textos de los botones y
+     etiquetas de la web están al final, en  i18n.es.
+
    ✦ IMÁGENES: van en /assets/media/<proyecto>/. Optimízalas antes de subirlas
    (JPG, 2400 px de lado largo, calidad ~80). Vídeos: MP4 H.264, < 10 MB.
    ========================================================================== */
@@ -56,7 +61,24 @@ window.CRU = {
       { title: "Illustration",     items: ["Digital", "Traditional"] }
     ],
 
-    closing: ["enjoy", "true design"]
+    closing: ["enjoy", "true design"],
+
+    // ---- Versión en español de los textos del sitio
+    es: {
+      heroLine: "cru, ese soy yo, un creativo en construcción.",
+      heroMeta: ["Fotografía — Diseño digital — Ilustración", "Estudiante de Diseño Digital, U-TAD", "Madrid, España"],
+      about: "Me muevo entre distintas disciplinas artísticas, de la fotografía a la ilustración y el diseño digital. Estoy en constante proceso de aprender y crecer, buscando siempre poner intención y sensibilidad en cada proyecto, y contar *historias con sentido*.",
+      aboutMore: "Me llamo Martín Cru, soy estudiante y creativo en construcción, y ahora mismo estudio Diseño Digital en U-TAD. Sigo explorando y dando forma a mi propia identidad y estilo, pero aquí tienes una selección de algunos de mis trabajos. Espero que los disfrutes :)",
+      skills: [
+        { title: "Fotografía",       photo: true, items: ["Fotografía callejera", "Retrato", "Fotografía analógica", "Fotografía publicitaria"] },
+        { title: "Diseño",           items: ["Diseño de marca", "Logotipos", "Postproducción", "Carteles", "Motion graphics"] },
+        { title: "Dirección visual", items: ["Dirección de arte", "Storytelling", "Estrategia visual"] },
+        { title: "Ilustración",      items: ["Digital", "Tradicional"] }
+      ],
+      photoLabel: "Para fotografía, hay un portfolio aparte ↗",
+      closing: ["disfruta", "del diseño de verdad"],
+      location: "Madrid, España"
+    }
   },
 
   /* ------------------------------------------------------------- TRABAJOS
@@ -104,17 +126,23 @@ window.CRU = {
       intro: "SUMM is a fictional cultural event where music and cocktails come together in a single *sensory experience*. Set on the rooftop of La Casa Encendida in Madrid, the space transforms into a gateway to different cultures.\n\nMusic, flavour, rhythm, and energy blend as sounds from countries like Argentina and Brazil take over the atmosphere.",
       blocks: [
         { type: "full",  src: M("summ/banner"), ratio: "3/2" },
-        { type: "quote", body: "Six bands, six genres, *six cocktails.*" },
+        { type: "quote", body: "Six bands, six genres, *six cocktails.*", es: { body: "Seis bandas, seis géneros, *seis cócteles.*" } },
         { type: "color" },
         { type: "pair",  ratio: "3/2", items: [ { src: M("summ/entrada2") }, { src: M("summ/pasaporte") } ] },
         { type: "full",  src: M("summ/poster3"), ratio: "3/2" },
         { type: "pair",  ratio: "3/2", items: [ { src: M("summ/poster1") }, { src: M("summ/poster2") } ] },
         { type: "light" },
-        { type: "text",  title: "The line-up", body: "Throughout the summer months, visitors can enjoy live performances of tango, bossa nova, afrobeat, jazz, folk, and reggae, all within one vibrant setting." },
+        { type: "text",  title: "The line-up", body: "Throughout the summer months, visitors can enjoy live performances of tango, bossa nova, afrobeat, jazz, folk, and reggae, all within one vibrant setting.",
+          es: { title: "El cartel", body: "Durante los meses de verano, el público puede disfrutar de tango, bossa nova, afrobeat, jazz, folk y reggae en directo, todo en un mismo lugar lleno de vida." } },
         { type: "pair",  ratio: "3/2", items: [ { src: M("summ/merch") }, { src: M("summ/instagram") } ] },
         { type: "full",  src: M("summ/pulseras"), ratio: "3/2" }
       ],
-      credits: [ ["Art direction", "Martín Cru"] ]
+      credits: [ ["Art direction", "Martín Cru"] ],
+      es: {
+        discipline: "Dirección de arte", industry: "Evento cultural", client: "Universidad",
+        intro: "SUMM es un evento cultural ficticio donde la música y los cócteles se unen en una sola *experiencia sensorial*. En la azotea de La Casa Encendida, en Madrid, el espacio se convierte en una puerta a otras culturas.\n\nMúsica, sabor, ritmo y energía se mezclan mientras los sonidos de países como Argentina o Brasil se adueñan del ambiente.",
+        credits: [ ["Dirección de arte", "Martín Cru"] ]
+      }
     },
 
     {
@@ -131,16 +159,21 @@ window.CRU = {
       intro: "Modern cuisine as we know it today is the result of centuries of blending. Ingredients that traveled on ships, recipes handed down through families, techniques that migrated from one culture to another…\n\nOur restaurant is born from that history: a space that honors blending as *living knowledge*.",
       blocks: [
         { type: "full",  src: M("sapere/naming-1"), ratio: "16/9" },
-        { type: "text",  title: "Concept", body: "At SAPERE, we step away from whimsical fusion to champion cuisine as a discipline of understanding. Derived from the Latin *sapĕre* (“to taste” and “to possess wisdom”), this project proposes understanding gastronomy not merely through flavor, but as a **living narrative**." },
+        { type: "text",  title: "Concept", es: { title: "Concepto", body: "En SAPERE nos alejamos de la fusión caprichosa para defender la cocina como una disciplina del entendimiento. Del latín *sapĕre* («tener sabor» y «ser sabio»), el proyecto propone entender la gastronomía no solo a través del sabor, sino como un **relato vivo**." }, body: "At SAPERE, we step away from whimsical fusion to champion cuisine as a discipline of understanding. Derived from the Latin *sapĕre* (“to taste” and “to possess wisdom”), this project proposes understanding gastronomy not merely through flavor, but as a **living narrative**." },
         { type: "color" },
-        { type: "quote", body: "We do not serve recipes; we serve *the origin of flavors.*" },
+        { type: "quote", body: "We do not serve recipes; we serve *the origin of flavors.*", es: { body: "No servimos recetas; servimos *el origen de los sabores.*" } },
         { type: "full",  src: M("sapere/6-vitrina-poster"), ratio: "16/9" },
         { type: "pair",  ratio: "16/9", items: [ { src: M("sapere/3-colores") }, { src: M("sapere/4-naming-origen") } ] },
         { type: "pair",  ratio: "16/9", items: [ { src: M("sapere/7-tarjeta-visita") }, { src: M("sapere/9-posavasos-camiseta") } ] },
         { type: "full",  src: M("sapere/10-ticket"), ratio: "16/9" },
         { type: "light" }
       ],
-      credits: [ ["Branding & visual identity", "Gloria Sarmiento, Martín Cru"], ["Context", "Fictional project at U-Tad"] ]
+      credits: [ ["Branding & visual identity", "Gloria Sarmiento, Martín Cru"], ["Context", "Fictional project at U-Tad"] ],
+      es: {
+        industry: "Restaurante", client: "Ficticio",
+        intro: "La cocina moderna, tal y como la conocemos hoy, es fruto de siglos de mestizaje. Ingredientes que viajaron en barco, recetas heredadas de generación en generación, técnicas que migraron de una cultura a otra…\n\nNuestro restaurante nace de esa historia: un espacio que honra el mestizaje como *saber vivo*.",
+        credits: [ ["Branding e identidad visual", "Gloria Sarmiento, Martín Cru"], ["Contexto", "Proyecto ficticio en U-Tad"] ]
+      }
     },
 
     {
@@ -155,17 +188,23 @@ window.CRU = {
       color: "#4A0E15",
       cover: { src: M("haromy/post-haromy"), ratio: "4/5" },
       intro: "HAROMY, *Sound of Scent*, is a fragrance concept inspired by music, where sound and scent collide and rhythms move beyond the senses. The line features two distinct variants: “Misty Mood”, an elegant and refined jazz-inspired fragrance designed for him; and “Duende”, a scent shaped by the passion and intensity of flamenco, created for her.\n\nThe project involved the whole process of branding, copy, art direction, packaging and 3D rendering of the perfume bottles.",
-      hero: { type: "full", src: M("haromy/dscf1131-1"), ratio: "16/9" },
+      // Recurso principal: el anuncio en YouTube, con la foto del frasco de portada
+      hero: { type: "youtube", id: "HgjcCSw5ow0", poster: M("haromy/dscf1131-1"), caption: "HAROMY · Ad", es: { caption: "HAROMY · Anuncio" } },
       blocks: [
         { type: "color" },
         { type: "pair",  ratio: "4/5", items: [ { src: M("haromy/post-haromy") }, { src: M("haromy/post-haromy-3") } ] },
-        { type: "inset", src: "assets/media/haromy/haromy-film.mp4", poster: "assets/media/haromy/haromy-film-poster.jpg", width: "narrow", sound: true, caption: "Campaign film" },
+        { type: "inset", src: "assets/media/haromy/haromy-film.mp4", poster: "assets/media/haromy/haromy-film-poster.jpg", width: "narrow", sound: true, caption: "Campaign film", es: { caption: "Vídeo de campaña" } },
         { type: "light" },
         { type: "pair",  ratio: "4/5", items: [ { src: M("haromy/mesa-de-trabajo-5") }, { src: M("haromy/mesa-de-trabajo-6") } ] },
         { type: "pair",  ratio: "4/5", items: [ { src: M("haromy/mesa-de-trabajo-2") }, { src: M("haromy/mesa-de-trabajo-3") } ] },
         { type: "pair",  ratio: "4/5", join: true, items: [ { src: M("haromy/mesa-de-trabajo-1") }, { src: M("haromy/mesa-de-trabajo-1-copia") } ] }   // join: sin separación; las dos mitades forman la web "HAROMY"
       ],
-      credits: [ ["Branding, copy, art direction, packaging & 3D", "Martín Cru"] ]
+      credits: [ ["Branding, copy, art direction, packaging & 3D", "Martín Cru"] ],
+      es: {
+        discipline: "Producto y branding", industry: "Perfumería", client: "Universidad",
+        intro: "HAROMY, *Sound of Scent*, es un concepto de fragancia inspirado en la música, donde sonido y aroma chocan y los ritmos van más allá de los sentidos. La línea tiene dos variantes: «Misty Mood», una fragancia elegante y refinada inspirada en el jazz, pensada para él; y «Duende», un aroma moldeado por la pasión y la intensidad del flamenco, creado para ella.\n\nEl proyecto abarcó todo el proceso: branding, copy, dirección de arte, packaging y render 3D de los frascos.",
+        credits: [ ["Branding, copy, dirección de arte, packaging y 3D", "Martín Cru"] ]
+      }
     },
 
     {
@@ -186,11 +225,11 @@ window.CRU = {
         { name: "Evokai",    url: "https://evokaidesign.framer.website/" }
       ],
       // Recurso principal: vídeo de YouTube (id = lo que va tras "watch?v=")
-      hero: { type: "youtube", id: "cOmy6GW0Cmg", poster: M("letterboxd-ad/how-many-movies"), caption: "Letterboxd · Your Life in Film — explainer ad" },
+      hero: { type: "youtube", id: "cOmy6GW0Cmg", poster: M("letterboxd-ad/how-many-movies"), caption: "Letterboxd · Your Life in Film — explainer ad", es: { caption: "Letterboxd · Your Life in Film — anuncio explicativo" } },
       blocks: [
         { type: "color" },
         { type: "full",  src: M("letterboxd-ad/app-django"), ratio: "16/9" },
-        { type: "quote", body: "Your life *in film.*" },
+        { type: "quote", body: "Your life *in film.*", es: { body: "Tu vida, *en películas.*" } },
         { type: "pair",  ratio: "16/9", items: [ { src: M("letterboxd-ad/perfil") }, { src: M("letterboxd-ad/posters") } ] },
         { type: "light" }
       ],
@@ -198,7 +237,16 @@ window.CRU = {
         ["Motion graphics", [ "Martín Cru", { name: "Guillegfx", url: "https://guillegfx.com/" }, { name: "Beloga", url: "https://beloga.net/" }, { name: "Evokai", url: "https://evokaidesign.framer.website/" } ]],
         ["Software", "Adobe After Effects"],
         ["Context", "Fictional ad, university project"]
-      ]
+      ],
+      es: {
+        discipline: "Motion graphics", industry: "App de cine", client: "Universidad / Ficticio",
+        intro: "Un anuncio ficticio para Letterboxd, la red social donde los amantes del cine registran, puntúan y reseñan todo lo que ven. Hecho como proyecto de motion graphics en la universidad, la pieza funciona como un *vídeo explicativo* de la app: desde el torrente infinito de películas que vemos hasta el diario, las notas y las favoritas que acaban dando forma a un perfil.\n\nAnimado en equipo con Adobe After Effects, junto a tres compañeros diseñadores.",
+        credits: [
+          ["Motion graphics", [ "Martín Cru", { name: "Guillegfx", url: "https://guillegfx.com/" }, { name: "Beloga", url: "https://beloga.net/" }, { name: "Evokai", url: "https://evokaidesign.framer.website/" } ]],
+          ["Software", "Adobe After Effects"],
+          ["Contexto", "Anuncio ficticio, proyecto universitario"]
+        ]
+      }
     },
 
     {
@@ -217,12 +265,17 @@ window.CRU = {
       blocks: [
         { type: "color" },
         { type: "trio",  ratio: "4/5", items: [ { src: M("casa-del-libro/mesa-de-trabajo-2") }, { src: M("casa-del-libro/mesa-de-trabajo-4") }, { src: M("casa-del-libro/mesa-de-trabajo-5") } ] },
-        { type: "quote", body: "Beauty in *imperfection.*" },
+        { type: "quote", body: "Beauty in *imperfection.*", es: { body: "La belleza de *lo imperfecto.*" } },
         { type: "pair",  ratio: "4/5", items: [ { src: M("casa-del-libro/mesa-de-trabajo-3") }, { src: M("casa-del-libro/mesa-de-trabajo-7") } ] },
         { type: "inset", src: M("casa-del-libro/mesa-de-trabajo-6"), width: "narrow" },
         { type: "pair",  ratio: "4/5", items: [ { src: M("casa-del-libro/mesa-de-trabajo-8") }, { src: M("casa-del-libro/mesa-de-trabajo-9") } ] }
       ],
-      credits: [ ["Art direction", "Martín Cru & colleague"], ["Context", "University assignment"] ]
+      credits: [ ["Art direction", "Martín Cru & colleague"], ["Context", "University assignment"] ],
+      es: {
+        discipline: "Dirección de arte", industry: "Librería", client: "Casa del Libro / Ficticio",
+        intro: "Como parte de un encargo de la universidad, teníamos que hacer el rebranding de una marca española conocida y consolidada: Casa del Libro. Junto a un compañero, desarrollamos una propuesta inspirada en la filosofía estética japonesa del *wabi-sabi*.\n\nNuestro enfoque buscaba dar a la marca una elegancia renovada abrazando la imperfección, las texturas naturales y unos elementos de diseño cuidados, para crear una identidad visual única y actual que respeta la esencia de Casa del Libro y la mejora con una nueva sensación de **calidez, autenticidad y armonía visual**.",
+        credits: [ ["Dirección de arte", "Martín Cru y compañero"], ["Contexto", "Encargo universitario"] ]
+      }
     },
 
     {
@@ -245,14 +298,19 @@ window.CRU = {
         { type: "pair",  ratio: "3/2", items: [ { src: M("tealtro/tarjeta-id") }, { src: M("tealtro/web") } ] },
         { type: "inset", src: M("tealtro/post3"), width: "narrow" },
         { type: "light" },
-        { type: "quote", body: "A dystopian story about *the ultimate form of control.*" },
-        { type: "inset", src: M("tealtro/1748101299725-00e42050-c217-4605-b4c6-9e8d78aa1746-1"), width: "narrow", caption: "La Red — poster" },
+        { type: "quote", body: "A dystopian story about *the ultimate form of control.*", es: { body: "Una historia distópica sobre *la forma de control definitiva.*" } },
+        { type: "inset", src: M("tealtro/1748101299725-00e42050-c217-4605-b4c6-9e8d78aa1746-1"), width: "narrow", caption: "La Red — poster", es: { caption: "La Red — cartel" } },
         { type: "full",  src: M("tealtro/vinilo"), ratio: "3/2" },
         { type: "pair",  ratio: "3/2", items: [ { src: M("tealtro/entrada") }, { src: M("tealtro/tarjeta-la-red") } ] },
         { type: "full",  src: M("tealtro/banners") },
         { type: "full",  src: M("tealtro/propaganda-la-red-metro") }
       ],
-      credits: [ ["Art direction & branding", "Martín Cru"] ]
+      credits: [ ["Art direction & branding", "Martín Cru"] ],
+      es: {
+        discipline: "Dirección de arte y branding", industry: "Teatro musical",
+        intro: "TEALTRO, Teatro Alternativo de Las Rozas, es una compañía de teatro musical movida por un único propósito: la **inclusión**. Con más de 50 miembros entre actores, músicos, equipo de producción y yo mismo, TEALTRO es mucho más que una compañía; *es una familia*.\n\nEs un proyecto muy personal, porque llevo más de 11 años formando parte de ella. Para mi trabajo final de Dirección de Arte decidí reimaginar y modernizar toda su imagen visual, y crear además la identidad de nuestra nueva obra, «La Red»: una historia distópica en la que la humanidad se enfrenta a la forma de control definitiva, la que impone la tecnología.",
+        credits: [ ["Dirección de arte y branding", "Martín Cru"] ]
+      }
     },
 
     {
@@ -271,12 +329,17 @@ window.CRU = {
       hero: { type: "pair", ratio: "1697/2400", items: [ { src: M("bold/cartel-final-bold") }, { src: M("bold/agenda-bold-con-imag") } ] },
       blocks: [
         { type: "color" },
-        { type: "inset", src: M("bold/flyer-ultrabold"), caption: "Ultra Bold — open call" },
+        { type: "inset", src: M("bold/flyer-ultrabold"), caption: "Ultra Bold — open call", es: { caption: "Ultra Bold — convocatoria abierta" } },
         { type: "full",  src: M("bold/rollup-bold"), ratio: "16/9" },
-        { type: "inset", src: M("bold/lanyard-bold"), width: "narrow", caption: "Accreditation" },
+        { type: "inset", src: M("bold/lanyard-bold"), width: "narrow", caption: "Accreditation", es: { caption: "Acreditación" } },
         { type: "light" }
       ],
-      credits: [ ["Graphic design", "Martín Cru & Flavia Alonso"], ["Organised by", "U-tad"] ]
+      credits: [ ["Graphic design", "Martín Cru & Flavia Alonso"], ["Organised by", "U-tad"] ],
+      es: {
+        discipline: "Diseño gráfico", industry: "Festival de diseño",
+        intro: "BOLD es un festival sobre *los futuros del diseño*, organizado por U-tad en la Central de Diseño de Matadero Madrid junto a DIMAD. Tres días de charlas, talleres y un concurso para talento emergente.\n\nLa identidad juega con degradados fluidos e iridiscentes y un logotipo contundente, aplicados a carteles, la agenda del evento, flyers, roll-ups y acreditaciones.",
+        credits: [ ["Diseño gráfico", "Martín Cru y Flavia Alonso"], ["Organiza", "U-tad"] ]
+      }
     },
 
     {
@@ -298,11 +361,11 @@ window.CRU = {
         { type: "pair",  ratio: "16/9", items: [ { src: M("triada/dscf4597") }, { src: M("triada/dscf4601") } ] },
         { type: "pair",  ratio: "16/9", items: [ { src: M("triada/dscf4608") }, { src: M("triada/dscf4748") } ] },
         { type: "color" },
-        { type: "quote", body: "Three notes that make a chord." },
+        { type: "quote", body: "Three notes that make a chord.", es: { body: "Tres notas que forman un acorde." } },
         { type: "full",  src: M("triada/dscf4913"), ratio: "16/9" },
         { type: "pair",  ratio: "16/9", items: [ { src: M("triada/dscf4933") }, { src: M("triada/dscf4975") } ] },
         { type: "full",  src: M("triada/dscf5042"), ratio: "16/9" },
-        { type: "text",  title: "On film", body: "Analogue photos taken around Madrid during the same days." },
+        { type: "text",  title: "On film", body: "Analogue photos taken around Madrid during the same days.", es: { title: "En analógico", body: "Fotos analógicas hechas por Madrid durante esos mismos días." } },
         { type: "trio",  items: [
             { src: M("triada/imagen-de-whatsapp-2025-11-26-a-las-10-06-34-0d506fd9") },
             { src: M("triada/imagen-de-whatsapp-2025-11-26-a-las-10-06-34-16456890") },
@@ -314,7 +377,12 @@ window.CRU = {
         { type: "light" },
         { type: "full",  src: M("triada/dscf5075"), ratio: "16/9" }
       ],
-      credits: [ ["Photography", "Martín Cru"], ["Client", "Universal Studios"] ]
+      credits: [ ["Photography", "Martín Cru"], ["Client", "Universal Studios"] ],
+      es: {
+        discipline: "Fotografía", industry: "Sesión de artista",
+        intro: "TRÍADA es una banda argentina que en 2023 empezó a grabarse haciendo versiones y a compartir los vídeos. En poco tiempo sumaron millones de visualizaciones y un público en internet de todo el mundo. Al ir cogiendo impulso, decidieron llamarse TRÍADA, en referencia al lenguaje musical de las tres notas que forman un acorde y a *la hermandad de tres personas*.\n\nTuve la increíble oportunidad de hacerles fotos espontáneas durante su estancia en Madrid, mientras grababan su próximo disco. Algunas analógicas, en exteriores y en estudio.",
+        credits: [ ["Fotografía", "Martín Cru"], ["Cliente", "Universal Studios"] ]
+      }
     },
 
     {
@@ -337,8 +405,36 @@ window.CRU = {
         { type: "pair",  ratio: "4/3", items: [ { src: M("personal-work/captura-de-pantalla-2025-11-19-095746") }, { src: M("personal-work/imagen-de-whatsapp-2025-11-19-a-las-10-12-28-10cc3eaf") } ] },
         { type: "light" }
       ],
-      credits: [ ["Design & illustration", "Martín Cru"] ]
+      credits: [ ["Design & illustration", "Martín Cru"] ],
+      es: {
+        title: "Trabajo personal", discipline: "Diseño gráfico e ilustración", industry: "Creatividad", client: "Yo mismo",
+        intro: "Una mezcla de mis propios carteles, dibujos e ilustraciones personales, como muestra de *exploración visual* y de crecimiento creativo.",
+        credits: [ ["Diseño e ilustración", "Martín Cru"] ]
+      }
     }
 
-  ]
+  ],
+
+  /* -------------------------------------------- TEXTOS DE LA INTERFAZ (ES)
+     Botones, menús y etiquetas fijas. El inglés está en el propio HTML / main.js. */
+  i18n: {
+    es: {
+      homeTitle: "CRU — Martín Cru · Diseño digital, dirección de arte e ilustración",
+      navWorks: "Trabajos", navAbout: "Sobre mí", navContact: "Contacto", navPhoto: "Fotografía ↗",
+      logoAria: "CRU — inicio",
+      skipWorks: "Saltar a los trabajos", skipContent: "Saltar al contenido",
+      selectedWorks: "Trabajos seleccionados", filterWorks: "Filtrar trabajos",
+      whoIs: "¿Quién es cru?",
+      letsTalk: "hablemos\u00a0→", email: "Email", basedIn: "Desde", socials: "Redes",
+      copy: "copiar", copied: "copiado ✓", selectCopy: "selecciona y copia",
+      allWorks: "← Todos los trabajos",
+      discipline: "Disciplina", industry: "Sector", client: "Cliente", year: "Año",
+      aboutProject: "Sobre el proyecto", collab: "En colaboración con",
+      credits: "Créditos", nextProject: "Siguiente proyecto",
+      legal: "Aviso legal y privacidad", top: "Volver arriba ↑",
+      play: "Ver vídeo", soundOn: "activar sonido", soundOff: "quitar sonido",
+      cursor: { view: "ver", write: "escribe", next: "siguiente" },
+      tags: { "All": "Todo", "Art Direction": "Dirección de arte", "Branding": "Branding", "Motion Graphics": "Motion graphics", "Photography": "Fotografía", "Illustration": "Ilustración" }
+    }
+  }
 };
