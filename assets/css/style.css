@@ -449,3 +449,27 @@ p { text-wrap: pretty; }
   .hero-logo svg { clip-path: inset(-10% 100% -10% -4%); transition: clip-path 1.1s cubic-bezier(.77, 0, .175, 1) .45s; }
   .is-ready .hero-logo svg { clip-path: inset(-10% -4% -10% -4%); }
 }
+
+/* ---------- Vídeo de YouTube (portada + play; YouTube solo carga al pulsar) ---------- */
+.ph.yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt-play {
+  all: unset; cursor: pointer; position: absolute; left: var(--pad); bottom: clamp(16px, 2.4vw, 32px); z-index: 2;
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .04em;
+  padding: 14px 22px 14px 18px; border-radius: 999px; color: #fff;
+  background: rgba(0,0,0,.45); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.22);
+  transition: background-color .2s ease, transform .16s var(--ease-out);
+}
+.yt-icon { width: 0; height: 0; border-style: solid; border-width: 7px 0 7px 11px; border-color: transparent transparent transparent currentColor; }
+.yt-play:active { transform: scale(var(--press)); }
+.yt-play:focus-visible { outline: 1px solid #fff; outline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) { .yt-play:hover { background: rgba(0,0,0,.7); } }
+
+/* ---------- Colaboradores con enlace a su web ---------- */
+.p-collab { margin-top: 28px !important; font-size: 11px !important; line-height: 1.6 !important; letter-spacing: .04em !important; }
+.person { white-space: nowrap; }
+.person .arr { display: inline-block; margin-left: 1px; font-size: .9em; opacity: .45; transition: opacity .2s ease, transform .25s var(--ease-out); }
+.person:focus-visible .arr { opacity: 1; transform: translate(1px, -1px); }
+@media (hover: hover) and (pointer: fine) { .person:hover .arr { opacity: 1; transform: translate(1px, -1px); } }
+@media (hover: none) { .person .arr { opacity: .8; } }

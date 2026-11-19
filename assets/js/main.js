@@ -191,6 +191,11 @@
         case "trio":  return `<div class="b-${b.type}" ${cols(b)}>${b.items.map(it => box(it, b.ratio, "data-reveal")).join("")}</div>`;
         case "text":  return `<div class="b-text"><span class="mono" data-reveal>${esc(b.title || "")}</span><div class="b-text-body">${paras(b.body)}</div></div>`;
         case "quote": return `<div class="b-quote"><p data-reveal>${rich(b.body)}</p></div>`;
+        // Vídeo de YouTube: se ve la portada local y solo carga YouTube al pulsar play (sin cookies hasta entonces)
+        case "youtube": return `<figure class="b-full" data-reveal style="margin:0"><div class="ph yt" style="aspect-ratio:${esc(b.ratio || "16/9")}">
+            ${b.poster ? media({ src: b.poster }, p.title, p.color) : ""}
+            <button type="button" class="yt-play mono" data-yt="${esc(b.id)}" aria-label="Play video: ${esc(b.caption || p.title)}"><span class="yt-icon" aria-hidden="true"></span>Play video</button>
+          </div>${b.caption ? `<figcaption class="mono muted" style="padding-left:var(--pad)">${esc(b.caption)}</figcaption>` : ""}</figure>`;
         default: return "";
       }
     };
@@ -208,14 +213,33 @@
         </dl>
       </section>
       ${p.hero ? `<section class="p-hero-alt" ${light}>${block(p.hero)}</section>` : `<section class="p-hero" ${light}>${media(p.cover, p.title, p.color)}</section>`}
-      <section class="p-intro" ${light}><span class="mono" data-reveal>About the project</span><div class="p-intro-body">${paras(p.intro)}</div></section>
+      <section class="p-intro" ${light}><span class="mono" data-reveal>About the project</span><div class="p-intro-body">${paras(p.intro)}${p.collab?.length ? `<p class="p-collab mono" data-reveal><span class="muted">In collaboration with</span> ${people(p.collab)}</p>` : ""}</div></section>
       ${segments.filter(s => s.items.length).map(s => `<section class="blocks" ${s.theme}>${s.items.map(block).join("")}</section>`).join("")}
-      ${p.credits?.length ? `<section class="p-credits" ${light}><span class="mono">Credits</span><dl class="mono">${p.credits.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl></section>` : ""}
+      ${p.credits?.length ? `<section class="p-credits" ${light}><span class="mono">Credits</span><dl class="mono">${p.credits.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${Array.isArray(v) ? people(v) : esc(v)}</dd>`).join("")}</dl></section>` : ""}
       <a class="p-next" href="project.html#${esc(next.slug)}" data-bg="#0b0b0b" data-fg="#ffffff" data-cursor="next">
         <div class="mono muted" style="margin-bottom:20px">Next project</div>
         <div class="row"><span class="t">${esc(next.title)}</span><span class="thumb">${media(next.cover, next.title, next.color)}</span></div>
       </a>`;
   }
+
+  // Lista de personas: "Nombre" o { name, url } → enlace a su web (se abre en otra pestaña)
+  function people(list = []) {
+    return list.map(x => typeof x === "string" ? esc(x)
+      : x.url ? `<a class="person link-u" href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.name)}<span class="arr" aria-hidden="true">↗</span></a>`
+      : esc(x.name)).join(", ");
+  }
+
+  // Al pulsar play se sustituye la portada por el reproductor de YouTube (dominio sin cookies)
+  document.addEventListener("click", e => {
+    const b = e.target.closest("[data-yt]");
+    if (!b) return;
+    const f = document.createElement("iframe");
+    f.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(b.dataset.yt)}?autoplay=1&rel=0&modestbranding=1`;
+    f.title = b.getAttribute("aria-label").replace(/^Play video: /, "");
+    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    f.allowFullscreen = true;
+    b.parentElement.replaceChildren(f);
+  });
 
   function isDarkColor(hex = "#000") {
     const h = hex.replace("#", "");

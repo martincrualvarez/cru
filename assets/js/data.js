@@ -68,6 +68,8 @@ window.CRU = {
      size:   "l" grande · "m" mediano · "s" pequeño
      color:  color al que cambia el fondo dentro del proyecto
      tags:   alimentan los filtros de la home
+     collab: [{ name, url }] → línea «In collaboration with…» bajo el texto, con enlace a su web
+     credits: el valor puede ser texto o una lista de personas ("Nombre" o { name, url })
 
      blocks (en el orden que quieras):
        { type: "full",  src, ratio?, caption? }          imagen o vídeo a sangre
@@ -79,6 +81,8 @@ window.CRU = {
          · align: "center" | "end" → alineación vertical dentro de la fila
          · inset con width: "wide" | "narrow" → centrada, más ancha o más estrecha
          · join: true → sin separación entre piezas (para composiciones que continúan)
+       { type: "youtube", id, poster?, caption? }        vídeo de YouTube: se ve la portada y solo
+                                                          carga YouTube al pulsar play (id = lo que va tras "watch?v=")
        { type: "text",  title?, body }
        { type: "quote", body }
        { type: "color" } → desde aquí, fondo del color del proyecto
@@ -162,6 +166,39 @@ window.CRU = {
         { type: "pair",  ratio: "4/5", join: true, items: [ { src: M("haromy/mesa-de-trabajo-1") }, { src: M("haromy/mesa-de-trabajo-1-copia") } ] }   // join: sin separación; las dos mitades forman la web "HAROMY"
       ],
       credits: [ ["Branding, copy, art direction, packaging & 3D", "Martín Cru"] ]
+    },
+
+    {
+      slug: "letterboxd-ad",
+      title: "Letterboxd Ad",
+      discipline: "Motion Graphics",
+      tags: ["Motion Graphics"],
+      industry: "Film App",
+      year: "2026",
+      client: "University / Fictional",
+      size: "m",
+      color: "#1B1F24",
+      cover: { src: M("letterboxd-ad/app-django"), ratio: "16/9" },
+      intro: "A fictional ad for Letterboxd, the social platform where film lovers log, rate and review everything they watch. Made as a university motion graphics project, the piece works as a *video explainer* of the app: from the endless stream of films we see, to the diary, the ratings and the favourites that end up shaping a profile.\n\nAnimated in Adobe After Effects as a team, in collaboration with three fellow designers.",
+      collab: [
+        { name: "Guillegfx", url: "https://guillegfx.com/" },
+        { name: "Beloga",    url: "https://beloga.net/" },
+        { name: "Evokai",    url: "https://evokaidesign.framer.website/" }
+      ],
+      // Recurso principal: vídeo de YouTube (id = lo que va tras "watch?v=")
+      hero: { type: "youtube", id: "cOmy6GW0Cmg", poster: M("letterboxd-ad/how-many-movies"), caption: "Letterboxd · Your Life in Film — explainer ad" },
+      blocks: [
+        { type: "color" },
+        { type: "full",  src: M("letterboxd-ad/app-django"), ratio: "16/9" },
+        { type: "quote", body: "Your life *in film.*" },
+        { type: "pair",  ratio: "16/9", items: [ { src: M("letterboxd-ad/perfil") }, { src: M("letterboxd-ad/posters") } ] },
+        { type: "light" }
+      ],
+      credits: [
+        ["Motion graphics", [ "Martín Cru", { name: "Guillegfx", url: "https://guillegfx.com/" }, { name: "Beloga", url: "https://beloga.net/" }, { name: "Evokai", url: "https://evokaidesign.framer.website/" } ]],
+        ["Software", "Adobe After Effects"],
+        ["Context", "Fictional ad, university project"]
+      ]
     },
 
     {
