@@ -122,8 +122,8 @@
     $("#about-text").innerHTML = rich(site.about);
     $("#about-more").innerHTML = rich(site.aboutMore || "");
     const ph = site.photoPortfolio;
-    $("#skills").innerHTML = site.skills.map(s => `
-      <div class="skill" data-reveal><h3>${esc(s.title)}</h3><ul class="mono">${s.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>${
+    $("#skills").innerHTML = site.skills.map((s, si) => `
+      <div class="skill" data-reveal style="--c:${si}"><h3>${esc(s.title)}</h3><ul class="mono">${s.items.map((i, k) => `<li style="--k:${k}">${esc(i)}</li>`).join("")}</ul>${
         ph?.url && (s.photo || /photo|foto/i.test(s.title)) ? `<a class="skill-note mono link-u" href="${esc(ph.url)}" target="_blank" rel="noopener">${esc(site.photoLabel || ph.label)}</a>` : ""}</div>`).join("");
     if (site.aboutPhoto) $("#about-photo").innerHTML = `<img src="${esc(site.aboutPhoto)}" alt="${esc(site.fullName || site.name)}" loading="lazy">`;
     $("#closing").innerHTML = site.closing.map(esc).join("<br>");
@@ -139,10 +139,17 @@
     });
 
 
+    // Hover tipo «ticket»: la portada se cubre con el color del trabajo y el texto va en un tono
+    // del mismo color (más claro si el fondo es oscuro, más oscuro si es claro)
+    const tileColors = c => {
+      const col = c || "#0b0b0b";
+      const ink = isDarkColor(col) ? `color-mix(in srgb, ${col} 38%, #fff)` : `color-mix(in srgb, ${col} 45%, #000)`;
+      return `--tc:${esc(col)};--ti:${esc(ink)}`;
+    };
     // Portadas verticales (más altas que anchas): los datos del trabajo van arriba
     const tall = r => { const [w, h] = String(r || "4/5").split("/").map(Number); return h > w; };
     grid.innerHTML = projects.map((p, i) => `
-      <a class="tile size-${p.size || "m"}${tall(p.cover.ratio) ? " is-tall" : ""}" href="project.html#${esc(p.slug)}" data-ratio="${esc(p.cover.ratio || "4/5")}" data-tags="${esc((p.tags || []).join("|"))}" data-reveal data-cursor="view">
+      <a class="tile size-${p.size || "m"}${tall(p.cover.ratio) ? " is-tall" : ""}" href="project.html#${esc(p.slug)}" data-ratio="${esc(p.cover.ratio || "4/5")}" style="${tileColors(p.color)}" data-tags="${esc((p.tags || []).join("|"))}" data-reveal data-cursor="view">
         <div class="tile-media" style="aspect-ratio:${esc(p.cover.ratio || "4/5")}">${media(p.cover, p.title, p.color)}</div>
         <div class="tile-meta">
           <span class="tile-title">${esc(p.title)}</span>

@@ -197,10 +197,20 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
   .tile-meta { opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
   .tile.is-tall .tile-meta { transform: translateY(-6px); }
   .tile:hover .tile-meta, .tile:focus-visible .tile-meta { opacity: 1; transform: none; }
-  /* Al pasar el ratón, velo negro suave sobre la foto para que destaquen nombre, categoría y año.
-     Ajuste: opacidad del velo en .tile:hover .tile-media::after (ahora .4). */
-  .tile-media::after { content: ""; position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .35s var(--ease-out); }
-  .tile:hover .tile-media::after, .tile:focus-visible .tile-media::after { opacity: .4; }
+  /* Hover tipo «ticket» (v17, referencia de Martín): la portada se cubre con el color del trabajo
+     (--tc, el `color` de data.js) y nombre, número, disciplina y año van en un tono del mismo color
+     (--ti: más claro si el fondo es oscuro, más oscuro si es claro). Nombre grande arriba, datos abajo. */
+  .tile-media::after { content: ""; position: absolute; inset: 0; background: var(--tc, #0b0b0b); opacity: 0; pointer-events: none; transition: opacity .45s var(--ease-out); }
+  .tile:hover .tile-media::after, .tile:focus-visible .tile-media::after { opacity: 1; }
+  .tile .tile-meta, .tile.is-tall .tile-meta {
+    top: 0; bottom: 0; align-items: start; background: none; color: var(--ti, #fff);
+    grid-template-rows: auto 1fr auto; padding: clamp(14px, 1.6vw, 26px);
+    transform: translateY(10px); transition: opacity .35s var(--ease-out), transform .55s var(--ease-out);
+  }
+  .tile-meta .muted { color: var(--ti, #fff); opacity: .8; }
+  .tile-meta .tile-title { font-size: clamp(28px, 3.2vw, 56px); line-height: .95; letter-spacing: -.035em; }
+  .tile-meta > :nth-child(3), .tile-meta > :nth-child(4) { grid-row: 3; align-self: end; }
+  .tile:hover .tile-meta, .tile:focus-visible .tile-meta { transition-delay: .06s; }
 }
 
 /* Fallback si una imagen no carga: bloque tintado con el color del proyecto */
@@ -238,6 +248,14 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
 .skill h3 { margin: 0 0 14px; font-family: var(--font-display); text-transform: none; font-weight: 300; font-size: 24px; letter-spacing: -.02em; }
 .skill ul { list-style: none; margin: 0; padding: 0; font-family: var(--font-display); font-size: 15px; text-transform: none; letter-spacing: 0; line-height: 1.6; }
 .skill li { color: var(--muted); }
+/* Skills (v17): al llegar a la sección, cada columna dibuja su línea y sus skills aparecen
+   una a una, despacio (columna tras columna) */
+.skills { position: relative; border-top: 0; }
+.skills::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--line); transform: scaleX(0); transform-origin: left; transition: transform 1.6s var(--ease-out); }
+.skills:has(.skill.is-in)::before { transform: none; }
+.skill li, .skill .skill-note { opacity: 0; transform: translateY(10px); transition: opacity .9s var(--ease-out), transform .9s var(--ease-out); transition-delay: calc(var(--c, 0) * 180ms + 350ms + var(--k, 0) * 110ms); }
+.skill .skill-note { --k: 6; }
+.skill.is-in li, .skill.is-in .skill-note { opacity: 1; transform: none; }
 
 /* ----------------------------------------------------------------- contact */
 .contact { padding: clamp(48px, 6vw, 100px) var(--pad) var(--pad); }
@@ -371,7 +389,8 @@ figcaption { padding-top: 10px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; }
-  [data-reveal] { opacity: 1; transform: none; }
+  [data-reveal], .skill li, .skill .skill-note { opacity: 1; transform: none; }
+  .skills::before { transform: none; }
 }
 
 /* ----------------------------------------------------------------- mobile */
