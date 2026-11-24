@@ -158,8 +158,16 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
 .tile-meta .muted { color: rgba(255,255,255,.78); }
 .tile-title { font-size: clamp(18px, 1.5vw, 24px); letter-spacing: -.02em; line-height: 1.05; }
 .tile-meta .mono { align-self: end; }
+/* Portadas verticales: datos arriba, con el degradado desde arriba (v15) */
+.tile.is-tall .tile-meta {
+  top: 0; bottom: auto; align-items: start;
+  padding: clamp(10px, 1vw, 16px) clamp(12px, 1.2vw, 18px) clamp(28px, 4vw, 56px);
+  background: linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,0));
+}
+.tile.is-tall .tile-meta .mono { align-self: start; }
 @media (hover: hover) and (pointer: fine) {
   .tile-meta { opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
+  .tile.is-tall .tile-meta { transform: translateY(-6px); }
   .tile:hover .tile-meta, .tile:focus-visible .tile-meta { opacity: 1; transform: none; }
   /* Al pasar el ratón, velo negro suave sobre la foto para que destaquen nombre, categoría y año.
      Ajuste: opacidad del velo en .tile:hover .tile-media::after (ahora .4). */

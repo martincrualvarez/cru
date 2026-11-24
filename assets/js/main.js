@@ -139,8 +139,10 @@
     });
 
 
+    // Portadas verticales (más altas que anchas): los datos del trabajo van arriba
+    const tall = r => { const [w, h] = String(r || "4/5").split("/").map(Number); return h > w; };
     grid.innerHTML = projects.map((p, i) => `
-      <a class="tile size-${p.size || "m"}" href="project.html#${esc(p.slug)}" data-ratio="${esc(p.cover.ratio || "4/5")}" data-tags="${esc((p.tags || []).join("|"))}" data-reveal data-cursor="view">
+      <a class="tile size-${p.size || "m"}${tall(p.cover.ratio) ? " is-tall" : ""}" href="project.html#${esc(p.slug)}" data-ratio="${esc(p.cover.ratio || "4/5")}" data-tags="${esc((p.tags || []).join("|"))}" data-reveal data-cursor="view">
         <div class="tile-media" style="aspect-ratio:${esc(p.cover.ratio || "4/5")}">${media(p.cover, p.title, p.color)}</div>
         <div class="tile-meta">
           <span class="tile-title">${esc(p.title)}</span>
