@@ -128,7 +128,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
 
 /* Rejilla tipo mosaico (v10): columnas que se rellenan por la más corta (main.js → layoutGrid),
    alturas escalonadas según la proporción de cada portada y el MISMO espaciado fino entre todas.
-   Ajustes: --tile-gap (espaciado) y --grid-cols (columnas en escritorio; en móvil, 1). */
+   Ajuste: --tile-gap (espaciado). Escritorio: 2 columnas; móvil (≤ 760 px): 1. */
 .grid { --tile-gap: clamp(4px, .45vw, 8px); display: flex; gap: var(--tile-gap); align-items: flex-start; }
 .grid-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--tile-gap); }
 .tile { position: relative; display: block; transition: opacity .5s var(--ease); }
@@ -161,6 +161,10 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
 @media (hover: hover) and (pointer: fine) {
   .tile-meta { opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
   .tile:hover .tile-meta, .tile:focus-visible .tile-meta { opacity: 1; transform: none; }
+  /* Al pasar el ratón, velo negro suave sobre la foto para que destaquen nombre, categoría y año.
+     Ajuste: opacidad del velo en .tile:hover .tile-media::after (ahora .4). */
+  .tile-media::after { content: ""; position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .35s var(--ease-out); }
+  .tile:hover .tile-media::after, .tile:focus-visible .tile-media::after { opacity: .4; }
 }
 
 /* Fallback si una imagen no carga: bloque tintado con el color del proyecto */
