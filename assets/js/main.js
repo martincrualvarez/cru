@@ -98,54 +98,24 @@
     $("#hero-line").innerHTML = splitLines(site.heroLine).replace(accentRe, site.heroLogo && heroSvg
       ? `<span class="hero-logo accent"><span class="sr-only">$1</span>${heroSvg}</span>$2`
       : '<span class="accent">$1</span>$2');
-    // Carrusel 3D vertical en la home (v12): las portadas van de frente, sin girar, sobre una
-    // curva vertical: la del centro, delante; las de arriba y abajo se alejan hacia el fondo
-    // (más pequeñas y desvaneciéndose). Bajan de arriba abajo en bucle continuo y lento.
-    // Se para con el ratón encima, fuera de pantalla o con la pestaña oculta.
-    const REEL_SECONDS = 4.5;   // segundos que tarda cada portada en pasar de una posición a la siguiente
+    // Mini visor en la home: pasa por las portadas de los trabajos
     const reel = $("#hero-reel");
     if (reel && site.heroReel !== false) {
       const still = p => p.cover.poster || (isVideo(p.cover.src) ? "" : p.cover.src);
       const items = projects.filter(still);
-      const n = items.length, step = 360 / n;
-      reel.innerHTML = `<div class="reel-stage"><div class="reel-drum">${items.map((p, i) =>
-        `<a class="reel-card" href="project.html#${esc(p.slug)}" data-cursor="view" tabindex="${i ? -1 : 0}" aria-label="${esc(p.title)}">
-           <img src="${esc(still(p))}" alt="" ${i > 2 ? 'loading="lazy"' : ""}></a>`).join("")}</div></div>
-        <span class="reel-label mono"><span class="muted">${pad2(projects.indexOf(items[0]) + 1)}</span> <span class="reel-title">${esc(items[0].title)}</span></span>`;
-      const cards = $$(".reel-card", reel), stage = $(".reel-stage", reel);
-      const title = $(".reel-title", reel), num = $(".reel-label .muted", reel);
-      let radius = 0, front = -1, t = 0;
-      // Radio de la curva: la portada vecina queda justo encima/debajo de la del centro, con un poco de aire
-      const measure = () => { radius = cards[0].offsetHeight * 1.24 / Math.sin(step * Math.PI / 180); };
-      const draw = () => {
-        cards.forEach((c, i) => {
-          const a = ((i * step - t) % 360 + 540) % 360 - 180;     // ángulo respecto al frente (−180…180); positivo = arriba
-          const r = a * Math.PI / 180;
-          const y = -radius * Math.sin(r), z = -radius * (1 - Math.cos(r));
-          const far = Math.min(1, Math.abs(a) / 100);              // 0 delante · 1 al fondo
-          c.style.transform = `translate3d(0, ${y.toFixed(1)}px, ${z.toFixed(1)}px)`;
-          c.style.opacity = Math.abs(a) > 100 ? 0 : (1 - far * far * .85).toFixed(3);
-          c.style.zIndex = String(1000 - Math.round(Math.abs(a)));
-          c.style.visibility = Math.abs(a) > 100 ? "hidden" : "visible";
-        });
-        const k = ((Math.round(t / step) % n) + n) % n;
-        if (k !== front) {
-          front = k;
-          title.textContent = items[k].title; num.textContent = pad2(projects.indexOf(items[k]) + 1);
-          cards.forEach((c, i) => c.setAttribute("tabindex", i === k ? 0 : -1));
-        }
-      };
-      measure(); draw();
-      window.addEventListener("resize", () => { measure(); draw(); });
-      let visible = true, hover = false, last = 0;
-      new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(stage);
-      stage.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") hover = true; });
-      stage.addEventListener("pointerleave", () => (hover = false));
-      if (!reduced) requestAnimationFrame(function tick(now) {
-        const dt = Math.min(64, now - (last || now)); last = now;
-        if (visible && !hover && !document.hidden) { t += dt / 1000 * step / REEL_SECONDS; draw(); }
-        requestAnimationFrame(tick);
-      });
+      reel.innerHTML = `<a class="reel-frame" href="project.html#${esc(items[0].slug)}" data-cursor="view">${items.map((p, i) =>
+        `<img src="${esc(still(p))}" alt="${esc(p.title)}" class="${i ? "" : "on"}" ${i > 2 ? 'loading="lazy"' : ""}>`).join("")}</a>
+        <span class="reel-label mono"><span class="muted">${pad2(1)}</span> <span class="reel-title">${esc(items[0].title)}</span></span>`;
+      let k = 0;
+      const imgs = $$("img", reel), frame = $(".reel-frame", reel), title = $(".reel-title", reel), num = $(".reel-label .muted", reel);
+      // Cambia cada 2,4 s; se detiene si el visor no está en pantalla o la pestaña está oculta
+      let visible = true;
+      new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(frame);
+      if (!reduced && imgs.length > 1) setInterval(() => {
+        if (!visible || document.hidden) return;
+        imgs[k].classList.remove("on"); k = (k + 1) % imgs.length; imgs[k].classList.add("on");
+        frame.href = `project.html#${items[k].slug}`; title.textContent = items[k].title; num.textContent = pad2(projects.indexOf(items[k]) + 1);
+      }, 2400);
     }
     $("#hero-meta").innerHTML = (site.heroMeta || []).map((m, i) => `<span class="${i ? "muted" : ""}">${esc(m)}</span>`).join("");
     $("#works-count").textContent = `(${pad2(projects.length)})`;
