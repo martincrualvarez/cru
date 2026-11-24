@@ -167,7 +167,10 @@
   }
 
   function splitLines(text) {
-    // Parte la frase en 2–3 líneas para la animación de entrada
+    // Parte la frase en líneas para la animación de entrada.
+    // Si la frase lleva saltos "\n" en data.js, se respetan tal cual (cada trozo es una línea);
+    // si no, se reparte automáticamente en 2–3 líneas.
+    if (text.includes("\n")) return text.split("\n").map(l => `<span class="split-line"><span>${esc(l.trim())}</span></span>`).join("");
     const words = text.split(" ");
     const per = Math.ceil(words.length / (words.length > 6 ? 3 : 2));
     const lines = [];

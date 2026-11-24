@@ -438,12 +438,13 @@ p { text-wrap: pretty; }
    Entra "escribiéndose" de izquierda a derecha tras subir la línea.
    Ajustes: --logo-h (tamaño) y --logo-gap (separación con la coma; negativo = más pegado). */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.hero { --logo-h: 1.02em; --logo-gap: -.07em; }
+.hero { --logo-h: 1.18em; --logo-gap: 0em; }   /* v9: logo algo mayor, solo en su línea (sin coma) */
 .hero-logo {
   display: inline-block; vertical-align: baseline;
   height: var(--logo-h); margin: -.1em var(--logo-gap) -.1em .01em;   /* márgenes verticales negativos: no abre el interlineado */
   transform: translateY(.1em);
 }
+.hero h1 .split-line:has(.hero-logo) { margin-bottom: .02em; }   /* respiro bajo el logo: la pata de la R no toca la línea siguiente */
 .hero-logo svg { height: 100%; width: auto; display: block; fill: currentColor; overflow: visible; }
 @media (prefers-reduced-motion: no-preference) {
   .hero-logo svg { clip-path: inset(-10% 100% -10% -4%); transition: clip-path 1.1s cubic-bezier(.77, 0, .175, 1) .45s; }
