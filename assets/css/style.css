@@ -382,26 +382,25 @@ figcaption { padding-top: 10px; }
 
 /* -------------------------------------------------------------- hero reel */
 .hero-top { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--gap); }
-/* Carrusel 3D vertical (v11): las portadas giran en un tambor sobre el eje horizontal
-   y bajan de arriba abajo, en bucle lento. main.js calcula el radio y mueve el giro.
-   Ajustes: --card-w (ancho de cada portada) y la velocidad en main.js (REEL_SECONDS). */
+/* Carrusel 3D vertical (v12, estilo sofiacapla.com pero en vertical y más lento):
+   portadas de frente, sin girar, sobre una curva que se aleja hacia el fondo arriba y abajo.
+   main.js coloca cada portada y mueve el giro. Ajustes: --card-w (ancho de cada portada)
+   y la velocidad en main.js (REEL_SECONDS). */
 .hero-reel { flex: none; --card-w: clamp(130px, 13vw, 220px); width: calc(var(--card-w) * 1.5); display: flex; flex-direction: column; align-items: center; }
 .reel-stage {
-  position: relative; width: 100%; height: calc(var(--card-w) * 2.75);
-  perspective: calc(var(--card-w) * 6); perspective-origin: 50% 50%;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
-          mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
+  position: relative; width: 100%; height: calc(var(--card-w) * 3); overflow: clip;
+  perspective: calc(var(--card-w) * 2.6); perspective-origin: 50% 50%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
 }
 .reel-drum { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
 .reel-card {
   position: absolute; width: var(--card-w); aspect-ratio: 4/5;
   left: calc(var(--card-w) / -2); top: calc(var(--card-w) * -.625);
-  backface-visibility: hidden; -webkit-backface-visibility: hidden;
   overflow: hidden; background: color-mix(in srgb, var(--fg) 6%, var(--bg));
-  box-shadow: 0 18px 40px -18px rgba(0,0,0,.45);
+  will-change: transform, opacity;
 }
 .reel-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.reel-card::after { content: ""; position: absolute; inset: 0; background: #000; opacity: var(--shade, 0); pointer-events: none; }
 .reel-label { display: block; margin-top: 10px; align-self: flex-start; padding-left: calc(var(--card-w) * .25); }
 @media (max-width: 760px) {
   .hero-top { flex-direction: column-reverse; align-items: stretch; }
