@@ -424,7 +424,7 @@ window.CRU = {
       navWorks: "Trabajos", navAbout: "Sobre mí", navContact: "Contacto", navPhoto: "Fotografía ↗",
       logoAria: "CRU — inicio",
       skipWorks: "Saltar a los trabajos", skipContent: "Saltar al contenido",
-      selectedWorks: "Trabajos seleccionados", filterWorks: "Filtrar trabajos",
+      selectedWorks: "Trabajos seleccionados", filterWorks: "Filtrar trabajos", filter: "Filtrar",
       whoIs: "¿Quién es cru?",
       letsTalk: "hablemos\u00a0→", email: "Email", basedIn: "Desde", socials: "Redes",
       copy: "copiar", copied: "copiado ✓", selectCopy: "selecciona y copia",

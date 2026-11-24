@@ -104,6 +104,7 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
   line-height: .95; letter-spacing: -.045em;
 }
 .hero-foot {
+  font-family: var(--font-display); font-size: 16px; font-weight: 400; letter-spacing: -.005em; line-height: 1.35;   /* v16: sans serif (antes mono) */
   margin-top: clamp(32px, 6vw, 80px);
   display: flex; justify-content: space-between; gap: var(--gap); flex-wrap: wrap;
   border-top: 1px solid var(--line); padding-top: 12px;
@@ -116,15 +117,42 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
   display: flex; justify-content: space-between; gap: var(--gap); align-items: baseline;
   padding: 0 0 var(--gap); margin-bottom: clamp(24px, 4vw, 56px);
 }
-.filters { display: flex; gap: 18px; flex-wrap: wrap; }
-.filters button {
-  all: unset; cursor: pointer; font: inherit; color: var(--muted);
-  padding: 6px 0; transition: color .2s ease, transform .16s var(--ease-out);
+/* Filtros en desplegable (v16): botón «Filter: All +» y lista que se abre al pulsar,
+   con el mismo cristal que el desplegable de «Works» de la cabecera */
+.works-head { position: relative; z-index: 10; }   /* el desplegable de filtros queda por encima de las portadas */
+.filter-drop { position: relative; }
+.filter-toggle {
+  all: unset; cursor: pointer; display: inline-flex; align-items: center; padding: 6px 0;
+  transition: transform .16s var(--ease-out);
 }
-.filters button:active { transform: scale(var(--press)); }
-.filters button:focus-visible { outline: 1px solid var(--fg); outline-offset: 3px; }
-.filters button[aria-pressed="true"], .filters button:hover { color: var(--fg); }
-.filters sup { font-size: 9px; margin-left: 2px; }
+.filter-toggle:active { transform: scale(var(--press)); }
+.filter-toggle:focus-visible { outline: 1px solid var(--fg); outline-offset: 3px; }
+.filter-label::after { content: ":"; }
+.filter-current { margin-left: .5em; }
+.filter-icon { position: relative; width: 9px; height: 9px; margin-left: 10px; }
+.filter-icon::before, .filter-icon::after { content: ""; position: absolute; left: 0; right: 0; top: 4px; height: 1px; background: currentColor; transition: transform .25s var(--ease-out); }
+.filter-icon::after { transform: rotate(90deg); }
+.filter-drop.is-open .filter-icon::after { transform: rotate(0deg); }
+.filters {
+  position: absolute; top: 100%; right: -16px; z-index: 20; margin-top: 8px;
+  min-width: 260px; padding: 10px 0; display: flex; flex-direction: column;
+  background: var(--bg);
+  -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  border: 1px solid var(--line);
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity .2s var(--ease-out), transform .2s var(--ease-out), visibility .2s;
+}
+.filter-drop.is-open .filters { opacity: 1; visibility: visible; transform: none; }
+.filters button {
+  all: unset; cursor: pointer; display: flex; justify-content: space-between; gap: 24px;
+  padding: 7px 16px; color: var(--muted); transition: color .15s ease, background-color .15s ease;
+}
+.filters button > .muted { font-size: 10px; }
+.filters button:focus-visible { outline: 1px solid var(--fg); outline-offset: -3px; }
+.filters button[aria-pressed="true"] { color: var(--fg); }
+@media (hover: hover) and (pointer: fine) {
+  .filters button:hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 7%, transparent); }
+}
 
 /* Rejilla tipo mosaico (v10): columnas que se rellenan por la más corta (main.js → layoutGrid),
    alturas escalonadas según la proporción de cada portada y el MISMO espaciado fino entre todas.
@@ -356,13 +384,12 @@ figcaption { padding-top: 10px; }
   .contact-grid { grid-template-columns: 1fr; }
   .hero-foot { flex-direction: column; gap: 4px; }
   .hero { min-height: auto; padding-top: 112px; }
-  .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 18px; white-space: nowrap; max-width: 100%;
-    padding-right: 32px; -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent); }
-  .filters button { padding: 12px 0; }
+  .filters { right: 0; min-width: min(280px, calc(100vw - 2 * var(--pad))); }
+  .filters button { padding: 12px 16px; }
+  .filter-toggle { padding: 10px 0; }
   .copy { padding: 8px 12px; }
   .contact-grid a.link-u { display: inline-block; padding: 6px 0; }
-  .filters::-webkit-scrollbar { display: none; }
-  .works-head { flex-direction: column; gap: 12px; }
+  .works-head { flex-direction: row; align-items: center; gap: 12px; }
   .about-label, .about-text, .about-more, .p-intro-body, .b-text-body, .skill, .p-intro .mono, .p-intro p, .b-text .mono, .b-text p,
   .p-credits .mono:first-child, .p-credits dl, .b-inset figure { grid-column: 1 / -1; }
   .skill { grid-column: span 6; margin-bottom: 28px; }
@@ -413,7 +440,7 @@ html { background: #ffffff; }
 @media (hover: none), (max-width: 760px) {
   :root { --theme-speed: .6s; }
   .site-header { -webkit-backdrop-filter: none; backdrop-filter: none; background: color-mix(in srgb, var(--bg) 94%, transparent); }
-  .nav-drop ul { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .nav-drop ul, .filters { -webkit-backdrop-filter: none; backdrop-filter: none; }
   .sound { -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 

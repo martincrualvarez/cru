@@ -195,10 +195,22 @@
     // Filtros
     const all = ["All", ...new Set(projects.flatMap(p => p.tags || []))];
     const filters = $("#filters");
-    filters.innerHTML = all.map((t, i) => `<button type="button" aria-pressed="${i === 0}" data-filter="${esc(t)}">${esc(tag(t))}</button>`).join("");
+    // Cuántos trabajos hay en cada filtro (se ve en pequeño a la derecha de cada opción)
+    const count = t => t === "All" ? projects.length : projects.filter(p => (p.tags || []).includes(t)).length;
+    filters.innerHTML = all.map((t, i) => `<button type="button" aria-pressed="${i === 0}" data-filter="${esc(t)}"><span>${esc(tag(t))}</span><span class="muted">${pad2(count(t))}</span></button>`).join("");
+    // Desplegable «Filter: All +»: se abre y cierra al pulsar (también en móvil); se cierra al elegir,
+    // al pulsar fuera o con Escape
+    const drop = $("#filter-drop"), toggle = $("#filter-toggle"), current = $(".filter-current", drop);
+    current.textContent = tag("All");
+    const setOpen = open => { drop.classList.toggle("is-open", open); toggle.setAttribute("aria-expanded", open); };
+    toggle.addEventListener("click", () => setOpen(!drop.classList.contains("is-open")));
+    document.addEventListener("click", e => { if (!drop.contains(e.target)) setOpen(false); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && drop.classList.contains("is-open")) { setOpen(false); toggle.focus(); } });
     filters.addEventListener("click", e => {
       const b = e.target.closest("button"); if (!b) return;
       $$("button", filters).forEach(x => x.setAttribute("aria-pressed", x === b));
+      current.textContent = tag(b.dataset.filter);
+      setOpen(false);
       const t = b.dataset.filter;
       const apply = () => { tiles.forEach(tile => tile.classList.toggle("is-hidden", t !== "All" && !tile.dataset.tags.split("|").includes(t))); layoutGrid(true); };
       if (reduced) return apply();
