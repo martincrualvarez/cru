@@ -140,7 +140,7 @@
 
 
     grid.innerHTML = projects.map((p, i) => `
-      <a class="tile size-${p.size || "m"}" href="project.html#${esc(p.slug)}" data-tags="${esc((p.tags || []).join("|"))}" data-reveal data-cursor="view">
+      <a class="tile size-${p.size || "m"}" href="project.html#${esc(p.slug)}" data-ratio="${esc(p.cover.ratio || "4/5")}" data-tags="${esc((p.tags || []).join("|"))}" data-reveal data-cursor="view">
         <div class="tile-media" style="aspect-ratio:${esc(p.cover.ratio || "4/5")}">${media(p.cover, p.title, p.color)}</div>
         <div class="tile-meta">
           <span class="tile-title">${esc(p.title)}</span>
@@ -150,6 +150,46 @@
         </div>
       </a>`).join("");
 
+    // Mosaico: reparte los trabajos visibles (en orden) en columnas, cada uno en la más corta.
+    // Escritorio: 2 columnas; móvil (≤ 760 px): 1. Se recalcula al filtrar y al cambiar de tamaño.
+    const tiles = $$(".tile", grid);
+    const ratioOf = t => { const [w, h] = (t.dataset.ratio || "4/5").split("/").map(Number); return h ? h / w : 1; };
+    let cols = 0;
+    const layoutGrid = (force) => {
+      const n = window.matchMedia("(max-width: 760px)").matches ? 1 : 2;
+      if (n === cols && !force) return;
+      cols = n;
+      const colEls = Array.from({ length: n }, () => Object.assign(document.createElement("div"), { className: "grid-col" }));
+      const vis = tiles.filter(t => !t.classList.contains("is-hidden"));
+      const r = vis.map(ratioOf), g = .02;
+      // Reparto base: cada trabajo a la columna más corta (respeta el orden de lectura)
+      let best = r.map(() => 0);
+      if (n === 2) {
+        const h = [0, 0];
+        best = r.map(x => { const k = h[0] <= h[1] ? 0 : 1; h[k] += x + g; return k; });
+        // Con 2 columnas, busca el reparto que deja ambas columnas casi al mismo largo,
+        // permitiendo que un trabajo empiece un poco antes que el anterior (≤ 0,35 de ancho de columna)
+        if (r.length <= 14) {
+          let bestD = Math.abs(h[0] - h[1]);
+          for (let m = 0; m < 1 << r.length; m += 2) {          // el primero siempre a la izquierda
+            const hh = [0, 0]; let last = 0, ok = true;
+            for (let i = 0; i < r.length; i++) {
+              const k = (m >> i) & 1;
+              if (hh[k] < last - .35) { ok = false; break; }
+              last = Math.max(last, hh[k]); hh[k] += r[i] + g;
+            }
+            const d = Math.abs(hh[0] - hh[1]);
+            if (ok && d < bestD - .01) { bestD = d; best = r.map((_, i) => (m >> i) & 1); }
+          }
+        }
+      }
+      vis.forEach((t, i) => colEls[best[i]].appendChild(t));
+      tiles.filter(t => t.classList.contains("is-hidden")).forEach(t => colEls[0].appendChild(t));
+      grid.replaceChildren(...colEls);
+    };
+    layoutGrid(true);
+    window.addEventListener("resize", () => layoutGrid());
+
     // Filtros
     const all = ["All", ...new Set(projects.flatMap(p => p.tags || []))];
     const filters = $("#filters");
@@ -158,7 +198,7 @@
       const b = e.target.closest("button"); if (!b) return;
       $$("button", filters).forEach(x => x.setAttribute("aria-pressed", x === b));
       const t = b.dataset.filter;
-      const apply = () => $$(".tile", grid).forEach(tile => tile.classList.toggle("is-hidden", t !== "All" && !tile.dataset.tags.split("|").includes(t)));
+      const apply = () => { tiles.forEach(tile => tile.classList.toggle("is-hidden", t !== "All" && !tile.dataset.tags.split("|").includes(t))); layoutGrid(true); };
       if (reduced) return apply();
       // fundido corto: se apaga la rejilla, se filtra y vuelve a aparecer
       grid.classList.add("is-filtering");

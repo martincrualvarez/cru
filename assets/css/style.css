@@ -126,19 +126,12 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
 .filters button[aria-pressed="true"], .filters button:hover { color: var(--fg); }
 .filters sup { font-size: 9px; margin-left: 2px; }
 
-.grid {
-  display: grid; grid-template-columns: repeat(12, 1fr);
-  column-gap: var(--gap); row-gap: clamp(48px, 7vw, 110px);
-  align-items: start;
-}
-/* Ritmo asimétrico tipo editorial */
-.tile { grid-column: span 6; transition: opacity .5s var(--ease); }
-.tile.size-l { grid-column: span 7; }
-.tile.size-m { grid-column: span 5; }
-.tile.size-s { grid-column: span 4; }
-.grid .tile:nth-child(4n+2) { margin-top: clamp(60px, 14vw, 240px); }
-.grid .tile:nth-child(4n+3).size-m,
-.grid .tile:nth-child(4n+3).size-s { grid-column: 2 / span 5; }
+/* Rejilla tipo mosaico (v10): columnas que se rellenan por la más corta (main.js → layoutGrid),
+   alturas escalonadas según la proporción de cada portada y el MISMO espaciado fino entre todas.
+   Ajustes: --tile-gap (espaciado) y --grid-cols (columnas en escritorio; en móvil, 1). */
+.grid { --tile-gap: clamp(4px, .45vw, 8px); display: flex; gap: var(--tile-gap); align-items: flex-start; }
+.grid-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--tile-gap); }
+.tile { position: relative; display: block; transition: opacity .5s var(--ease); }
 .tile.is-hidden { display: none; }
 
 .tile-media {
@@ -154,12 +147,21 @@ em { font-family: var(--font-serif); font-style: italic; font-weight: 400; lette
 }
 .tile:focus-visible { outline: none; }
 .tile:focus-visible .tile-media { outline: 1px solid var(--fg); outline-offset: 4px; }
+/* Datos del trabajo superpuestos sobre la portada (no abren hueco entre portadas):
+   con ratón aparecen al pasar por encima; en táctil se ven siempre. */
 .tile-meta {
-  display: grid; grid-template-columns: 1fr auto; gap: 4px 16px;
-  padding-top: 12px;
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; pointer-events: none;
+  display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; align-items: end;
+  padding: clamp(28px, 4vw, 56px) clamp(12px, 1.2vw, 18px) clamp(10px, 1vw, 16px);
+  color: #fff; background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
 }
-.tile-title { font-size: clamp(20px, 1.7vw, 28px); letter-spacing: -.02em; line-height: 1.05; }
+.tile-meta .muted { color: rgba(255,255,255,.78); }
+.tile-title { font-size: clamp(18px, 1.5vw, 24px); letter-spacing: -.02em; line-height: 1.05; }
 .tile-meta .mono { align-self: end; }
+@media (hover: hover) and (pointer: fine) {
+  .tile-meta { opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
+  .tile:hover .tile-meta, .tile:focus-visible .tile-meta { opacity: 1; transform: none; }
+}
 
 /* Fallback si una imagen no carga: bloque tintado con el color del proyecto */
 .media-fallback { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,.7); }
@@ -349,8 +351,6 @@ figcaption { padding-top: 10px; }
   .contact-grid a.link-u { display: inline-block; padding: 6px 0; }
   .filters::-webkit-scrollbar { display: none; }
   .works-head { flex-direction: column; gap: 12px; }
-  .tile, .tile.size-l, .tile.size-m, .tile.size-s,
-  .grid .tile:nth-child(4n+3).size-m, .grid .tile:nth-child(4n+3).size-s { grid-column: 1 / -1; margin-top: 0 !important; }
   .about-label, .about-text, .about-more, .p-intro-body, .b-text-body, .skill, .p-intro .mono, .p-intro p, .b-text .mono, .b-text p,
   .p-credits .mono:first-child, .p-credits dl, .b-inset figure { grid-column: 1 / -1; }
   .skill { grid-column: span 6; margin-bottom: 28px; }

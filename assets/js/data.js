@@ -87,7 +87,8 @@ window.CRU = {
 
      cover:  { src, ratio, poster? }   ratio = proporción en la home ("3/2", "4/5", "16/9"...)
              Si src es .mp4 / .webm → vídeo en bucle, sin sonido.
-     size:   "l" grande · "m" mediano · "s" pequeño
+     size:   ya no se usa (desde v10 la home es un mosaico de 2 columnas: el alto de cada
+             portada lo marca su ratio; vertical = más alta, horizontal = más baja)
      color:  color al que cambia el fondo dentro del proyecto
      tags:   alimentan los filtros de la home
      collab: [{ name, url }] → línea «In collaboration with…» bajo el texto, con enlace a su web
