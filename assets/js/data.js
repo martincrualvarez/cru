@@ -131,6 +131,8 @@ window.CRU = {
         { type: "color" },
         { type: "pair",  ratio: "3/2", items: [ { src: M("summ/entrada2") }, { src: M("summ/pasaporte") } ] },
         { type: "full",  src: M("summ/poster3"), ratio: "3/2" },
+        // Vídeo (summ-04.mp4 de la carpeta de Martín → 720p sin audio), en mitad de las fotos como en sofiacapla.com/summ
+        { type: "full",  src: "assets/media/summ/summ-video.mp4", poster: "assets/media/summ/summ-video-poster.jpg", ratio: "1280/726" },
         { type: "pair",  ratio: "3/2", items: [ { src: M("summ/poster1") }, { src: M("summ/poster2") } ] },
         { type: "light" },
         { type: "text",  title: "The line-up", body: "Throughout the summer months, visitors can enjoy live performances of tango, bossa nova, afrobeat, jazz, folk, and reggae, all within one vibrant setting.",
