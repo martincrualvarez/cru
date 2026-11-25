@@ -352,7 +352,7 @@ window.CRU = {
       year: "2025",
       client: "Universal Studios",
       size: "m",
-      color: "#2A2119",
+      color: "#EDA916",
       cover: { src: M("triada/dscf5022"), ratio: "16/9" },
       intro: "TRÍADA is an Argentinian band which started self-recording covers and sharing videos performing those songs in 2023. They quickly amassed millions of views and a global internet audience. As they gained momentum, they decided to call themselves TRÍADA, a reference to the musical language of three notes that make a chord, and *the sisterhood of three individuals*.\n\nI was given the incredible opportunity to capture some candid photos during their time in Madrid while they were recording their upcoming album. Including some analogue photos, outdoors and studio ones.",
       blocks: [

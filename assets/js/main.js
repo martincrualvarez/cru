@@ -409,23 +409,85 @@
     }
   }
 
+  // Cursor (v18): puntito que invierte el color del fondo (mix-blend-mode: difference), crece sobre
+  // enlaces y botones y se cambia por la etiqueta «View» / «Ver» en las portadas (data-cursor).
+  // Solo con ratón; en móvil/táctil no se crea y queda el cursor del sistema.
   function initCursor() {
-    if (matchMedia("(hover: none)").matches) return;
+    if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const dot = document.createElement("div");
+    dot.className = "cursor-dot";
     const c = document.createElement("div");
     c.className = "cursor mono";
-    document.body.appendChild(c);
-    addEventListener("pointermove", e => { c.style.left = e.clientX + "px"; c.style.top = e.clientY + "px"; }, { passive: true });
+    document.body.append(dot, c);
+    document.documentElement.classList.add("has-cursor");
+    let x = 0, y = 0, raf = 0;
+    const paint = () => { raf = 0; dot.style.translate = c.style.translate = `${x}px ${y}px`; };
+    addEventListener("pointermove", e => {
+      x = e.clientX; y = e.clientY;
+      dot.classList.add("is-in");
+      if (!raf) raf = requestAnimationFrame(paint);
+    }, { passive: true });
     document.addEventListener("pointerover", e => {
       const t = e.target.closest("[data-cursor]");
       if (t) { c.textContent = T("cursor", {})[t.dataset.cursor] || t.dataset.cursor; c.classList.add("on"); } else c.classList.remove("on");
+      dot.classList.toggle("is-label", !!t);
+      dot.classList.toggle("is-link", !t && !!e.target.closest("a[href], button, [role='button'], label"));
+      if (e.target.tagName === "IFRAME") { dot.classList.remove("is-in"); c.classList.remove("on"); }
     });
+    document.addEventListener("pointerout", e => { if (!e.relatedTarget) { dot.classList.remove("is-in"); c.classList.remove("on"); } });
+    addEventListener("pointerdown", () => dot.classList.add("is-down"));
+    addEventListener("pointerup", () => dot.classList.remove("is-down"));
+  }
+
+  // Microanimaciones (v18), solo en algunos sitios: menú de la cabecera (el texto rueda hacia arriba)
+  // y flecha de «let's talk →» (sale por la derecha y vuelve a entrar por la izquierda)
+  function initMicro() {
+    $$(".site-header nav > a, .site-header .nav-works > a").forEach(a => {
+      if ($(".roll", a)) return;
+      const txt = a.textContent;
+      a.innerHTML = `<span class="roll"><span>${esc(txt)}</span></span>`;
+      a.classList.add("has-roll");
+    });
+    const talk = $("#contact-link span");
+    if (talk && !$(".arr", talk)) talk.innerHTML = esc(talk.textContent).replace(/\s*→\s*$/, '&nbsp;<i class="arr" aria-hidden="true">→</i>');
   }
 
   function initTransitions() {
     const curtain = document.createElement("div");
     curtain.className = "curtain";
     document.body.appendChild(curtain);
-    requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add("is-ready")));
+    const html = document.documentElement;
+    const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => html.classList.add("is-ready")));
+
+    // Pantalla de carga con el ensō (v18): solo la primera vez que se entra en la web en cada sesión
+    // del navegador (al pasar de una página a otra ya no sale). El trazo se «pinta» con el pincel
+    // (mín. 2,2 s) y, cuando la página ha cargado (máx. 4,5 s), la cortinilla sube y deja ver la web.
+    let intro = false;
+    try { intro = !reduced && !sessionStorage.getItem("cru-intro"); sessionStorage.setItem("cru-intro", "1"); } catch (e) {}
+    if (!intro) return ready(), bindTransitions(curtain);
+    html.classList.add("is-intro");
+    curtain.innerHTML = `<div class="loader" aria-hidden="true"><div class="enso"></div><span class="loader-count mono">0%</span></div>`;
+    const count = $(".loader-count", curtain);
+    const MIN = 2200, MAX = 4500, t0 = performance.now();
+    const ease = p => 1 - Math.pow(1 - p, 3);
+    requestAnimationFrame(() => curtain.classList.add("is-drawing"));
+    (function tick() {
+      const p = Math.min(1, (performance.now() - t0) / MIN);
+      count.textContent = Math.round(ease(p) * 100) + "%";
+      if (p < 1) requestAnimationFrame(tick);
+    })();
+    const loaded = new Promise(r => (document.readyState === "complete" ? r() : addEventListener("load", r, { once: true })));
+    Promise.all([new Promise(r => setTimeout(r, MIN)), Promise.race([loaded, new Promise(r => setTimeout(r, MAX))])]).then(() => {
+      curtain.classList.add("is-done");
+      setTimeout(() => {
+        ready();
+        setTimeout(() => { curtain.classList.remove("is-drawing", "is-done"); curtain.innerHTML = ""; html.classList.remove("is-intro"); }, 1100);
+      }, 380);
+    });
+    bindTransitions(curtain);
+  }
+
+  function bindTransitions(curtain) {
 
     document.addEventListener("click", e => {
       const lb = e.target.closest("[data-lang]");
@@ -484,6 +546,7 @@
     initThemes();
     initReveal();
     initVideos();
+    initMicro();
     if (!rerender) { initCursor(); initTransitions(); }
   }
   boot(false);
