@@ -138,11 +138,12 @@ window.CRU = {
         { type: "pair",  ratio: "3/2", items: [ { src: M("summ/merch") }, { src: M("summ/instagram") } ] },
         { type: "full",  src: M("summ/pulseras"), ratio: "3/2" }
       ],
-      credits: [ ["Art direction", "Martín Cru"] ],
+      collab: [ { name: "Sofía Carbonell", url: "https://sofiacapla.com/" } ],
+      credits: [ ["Art direction", [ "Martín Cru", { name: "Sofía Carbonell", url: "https://sofiacapla.com/" } ]] ],
       es: {
         discipline: "Dirección de arte", industry: "Evento cultural", client: "Universidad",
         intro: "SUMM es un evento cultural ficticio donde la música y los cócteles se unen en una sola *experiencia sensorial*. En la azotea de La Casa Encendida, en Madrid, el espacio se convierte en una puerta a otras culturas.\n\nMúsica, sabor, ritmo y energía se mezclan mientras los sonidos de países como Argentina o Brasil se adueñan del ambiente.",
-        credits: [ ["Dirección de arte", "Martín Cru"] ]
+        credits: [ ["Dirección de arte", [ "Martín Cru", { name: "Sofía Carbonell", url: "https://sofiacapla.com/" } ]] ]
       }
     },
 
