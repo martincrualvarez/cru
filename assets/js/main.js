@@ -440,7 +440,6 @@
   }
 
   // Microanimaciones (v18), solo en algunos sitios: menú de la cabecera (el texto rueda hacia arriba)
-  // y flecha de «let's talk →» (sale por la derecha y vuelve a entrar por la izquierda)
   function initMicro() {
     $$(".site-header nav > a, .site-header .nav-works > a").forEach(a => {
       if ($(".roll", a)) return;
@@ -448,8 +447,6 @@
       a.innerHTML = `<span class="roll"><span>${esc(txt)}</span></span>`;
       a.classList.add("has-roll");
     });
-    const talk = $("#contact-link span");
-    if (talk && !$(".arr", talk)) talk.innerHTML = esc(talk.textContent).replace(/\s*→\s*$/, '&nbsp;<i class="arr" aria-hidden="true">→</i>');
   }
 
   function initTransitions() {

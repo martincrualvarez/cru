@@ -551,9 +551,9 @@ p { text-wrap: pretty; }
 
 /* ---------- Cursor: puntito que se invierte según el fondo ----------
    mix-blend-mode: difference → negro sobre blanco, blanco sobre negro y en negativo sobre fotos y colores.
-   Sobre enlaces y botones crece; sobre las portadas se cambia por la etiqueta «View» / «Ver».
+   Sobre enlaces y botones crece un poco; sobre las portadas se cambia por la etiqueta «View» / «Ver».
    Ajustes: --dot (tamaño), --dot-link (cuánto crece). */
-:root { --dot: 10px; --dot-link: 3.4; }
+:root { --dot: 7px; --dot-link: 2.2; }   /* v18.1: más pequeño y expansión más sutil */
 .has-cursor, .has-cursor * { cursor: none !important; }
 .cursor-dot {
   position: fixed; left: 0; top: 0; z-index: 120; pointer-events: none;
@@ -616,13 +616,3 @@ p { text-wrap: pretty; }
 .site-header nav a.has-roll::after { display: none; }   /* aquí el subrayado se sustituye por el rodillo */
 @media (hover: hover) and (pointer: fine) { a.has-roll:hover .roll > span { transform: translateY(-1.3em); } }
 a.has-roll:focus-visible .roll > span { transform: translateY(-1.3em); }
-
-/* ---------- «let's talk →»: la flecha sale y vuelve a entrar ---------- */
-.big-link .arr { display: inline-block; font-style: normal; }
-@media (hover: hover) and (pointer: fine) { .big-link:hover .arr { animation: arr-loop .7s var(--ease-out); } }
-@keyframes arr-loop {
-  0% { transform: none; opacity: 1; }
-  45% { transform: translateX(.5em); opacity: 0; }
-  46% { transform: translateX(-.5em); opacity: 0; }
-  100% { transform: none; opacity: 1; }
-}
